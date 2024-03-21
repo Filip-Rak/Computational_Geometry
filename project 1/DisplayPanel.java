@@ -8,11 +8,13 @@ public class DisplayPanel extends JPanel
     //Attributes
     private final List<Drawable> drawableList = new ArrayList<>();  //holds objects to draw
     private final List<Color> colorList = new ArrayList<>();  //holds colors for objects
+    static public final int HEIGHT = 600;
+    static public final int WIDTH = 1200;
 
     //Constructor
     DisplayPanel()
     {
-        this.setPreferredSize(new Dimension(600, 600));
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
     }
 
     //Methods
@@ -39,7 +41,5 @@ public class DisplayPanel extends JPanel
             g2D.setColor(colorList.get(i));
             drawableList.get(i).draw(g2D);
         }
-
-
     }
 }

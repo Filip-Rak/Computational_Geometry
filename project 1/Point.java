@@ -10,9 +10,17 @@ public class Point implements Drawable
     {
         this.x = x;
         this.y = y;
+
+        //translateToScreenCenter();
     }
 
     //Methods
+    void translateToScreenCenter()
+    {
+            this.x += DisplayPanel.HEIGHT / 2;
+            this.y += DisplayPanel.WIDTH / 2;
+    }
+
     public String relationToLine(Line l)
     {
         //Ax + By + C < || > 0   //warunek
@@ -81,6 +89,43 @@ public class Point implements Drawable
         int diameter = 20;
         int radius = diameter / 2; //polowa srednicy
         g.fillOval(this.x - radius, this.y - radius, diameter, diameter);
+    }
+
+    public double distanceToLine(Line ln)
+    {
+        //przepisanie wartosci dla ultawnienia wizualizacji
+        double x0 = this.getX(), x1 = ln.getP1().getX(), x2 = ln.getP2().getX();
+        double y0 = this.getY(), y1 = ln.getP1().getY(), y2 = ln.getP2().getY();
+
+        double numerator = Math.abs( (x2 - x1) * (y1 - y0) - (x1 - x0) * (y2 - y1) );
+        double denominator = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
+        return numerator / denominator;
+    }
+
+    public static double distToPoint(Point p1, Point p2)
+    {
+        //d = sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
+
+        double x_pow = Math.pow( (double)p2.getX() -  (double)p1.getX(), 2);
+        double y_pow = Math.pow( (double)p2.getY() -  (double)p1.getY(), 2);
+
+        return Math.sqrt(x_pow + y_pow);
+    }
+
+    public static Point directionVector(Line line)
+    {
+        //Przepisanie wartosci
+        double x1 = line.getP1().getX();
+        double y1 = line.getP1().getY();
+        double x2 = line.getP2().getX();
+        double y2 = line.getP2().getY();
+
+        //obliczenie wektora kierunkowego
+        double vx = x2 - x1;
+        double vy = y2 - y1;
+
+        return new Point((int)vx, (int)vy);
     }
 
     //Getters
