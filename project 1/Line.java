@@ -162,7 +162,7 @@ public class Line implements Drawable
         //punkt przecięcia
         double x0 = (((b2 * c1) - (b1 * c2)) / denominator) * -1;
         double y0 = ((c1 * a2) - (c2 * a1)) / denominator;
-        Point intersection = new Point((int)x0, (int)y0);
+        Point intersection = new Point((int)Math.round(x0), (int)Math.round(y0));
 
         //Sprawdzanie dla odcinka
         Line[] to_check = {l1, l2};
@@ -170,23 +170,10 @@ public class Line implements Drawable
         {
             if(!check.isInfinite())
             {
-                int max_x = check.getP1().getX();
-                int min_x = check.getP2().getX();
-
-                if(check.getP2().getX() > max_x)
-                {
-                    max_x = check.getP2().getX();
-                    min_x = check.getP1().getX();
-                }
-
-                int max_y = check.getP1().getY();
-                int min_y = check.getP2().getY();
-
-                if(check.getP2().getY() > max_y)
-                {
-                    max_y = check.getP2().getY();
-                    min_y = check.getP1().getY();
-                }
+                double max_x = Math.max(check.getP1().getX(), check.getP2().getX());
+                double min_x = Math.min(check.getP1().getX(), check.getP2().getX());
+                double max_y = Math.max(check.getP1().getY(), check.getP2().getY());
+                double min_y = Math.min(check.getP1().getY(), check.getP2().getY());
 
                 if(intersection.getX() > max_x || intersection.getX() < min_x || intersection.getY() > max_y || intersection.getY() < min_y)
                     return null;

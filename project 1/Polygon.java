@@ -7,7 +7,7 @@ public class Polygon implements Drawable
     private final Line[] lines;
 
     //Constructors
-    Polygon(int n, Point[] verts)
+    Polygon(Point[] verts)
     {
         verticies = verts;
         this.lines = calcLines();
@@ -51,14 +51,14 @@ public class Polygon implements Drawable
             {
                 //sprawdzenie czy nie liczymy podwojnie
                 //jeden z pkt jest ponizej
-                if(l.getP1().getY() < destination.getY() || l.getP2().getY() < destination.getY()) {
+                if(l.getP1().getY() < destination.getY() || l.getP2().getY() < destination.getY())
+                {
                     //drugi pkt jest wyzej lub na rowni
                     if (l.getP1().getY() >= destination.getY() || l.getP2().getY() >= destination.getY())
                         count++;
                 }
             }
         }
-
             return count % 2 != 0;
     }
 

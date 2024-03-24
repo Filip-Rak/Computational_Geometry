@@ -185,7 +185,7 @@ public class Main
                 new Point(620, 480),
         };
 
-        Polygon w1 = new Polygon(wpv.length, wpv);
+        Polygon w1 = new Polygon(wpv);
 
         //Rysowanie wielokatu
         displayFrame.panel.AddDrawable(w1);
@@ -194,7 +194,7 @@ public class Main
         for(Point vert : wpv)
             displayFrame.panel.AddDrawable(vert, Color.blue);
 
-        Point tgt_3 = new Point(660, 490);   //punkt testowy    //y = 480 dla wierzcholka
+        Point tgt_3 = new Point(660, 490);   //punkt testowy    //y = 480, 460 dla wierzcholka
         displayFrame.panel.AddDrawable(tgt_3, Color.green);
         System.out.println("W1 contains tgt_3: " + w1.contains(tgt_3));
     }

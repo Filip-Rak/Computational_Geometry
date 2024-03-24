@@ -8,7 +8,7 @@ public class Triangle implements Drawable
     private final double surfaceArea;
 
     //Constructors
-    //Note: Mozna sprowadzic oba konstruktory do jednego uzywajac interfejs
+    //Note: Mozna sprowadzic oba konstruktory do jednego uzywajac interfejsu
     Triangle(double[] coeff1, double[] coeff2, double[] coeff3) throws Exception
     {
         //Obliczanie wierzcholkow
