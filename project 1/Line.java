@@ -214,7 +214,7 @@ public class Line implements Drawable
         return new Point((int)Px, (int)Py);
     }
 
-    public static double angleBetweenLines(Line l1, Line l2)
+    public static double angle180(Line l1, Line l2)
     {
         //Obliczenie wektora kierunkowego
         Point dv_1 = Point.directionVector(l1);
@@ -238,25 +238,59 @@ public class Line implements Drawable
         return (radian_angle * 180) / Math.PI;
     }
 
-    public void draw(Graphics2D g)
+    public static double angle360(Line l1, Line l2)
     {
+        //Obliczenie wektora kierunkowego
+        Point dv_1 = Point.directionVector(l1);
+        Point dv_2 = Point.directionVector(l2);
+
+        //Przepisanie wartości
+        double a1 = dv_1.getX(), a2 = dv_1.getY();
+        double b1 = dv_2.getX(), b2 = dv_2.getY();
+
+        //Iloczyn skalarny: a1 * b1 + a2 * b2
+        double dotProduct = (a1 * b1) + (a2 * b2);
+
+        //Obliczenie modułów: sqrt(a1^2 + a2^2) oraz sqrt(b1^2 + b2^2)
+        double magnitude_1 = Math.sqrt(Math.pow(a1, 2) + Math.pow(a2, 2));
+        double magnitude_2 = Math.sqrt(Math.pow(b1, 2) + Math.pow(b2, 2));
+
+        //Iloczyn wektorowy: a1*b2 - a2*b1 (zwraca 'z' w 3D, ale używamy do orientacji w 2D)
+        double crossProduct = (a1 * b2) - (a2 * b1);
+
+        //Kat (wielkość) na podstawie iloczynu skalarnego i magnitud
+        double angle = Math.acos(dotProduct / (magnitude_1 * magnitude_2));
+
+        //Konwersja radianów na stopnie
+        angle = Math.toDegrees(angle);
+
+        //Jeśli iloczyn wektorowy jest ujemny, obrót jest zgodny z ruchem wskazówek zegara,
+        //więc przekształcamy kąt na kąt w zakresie 0-360 stopni
+        if (crossProduct < 0)
+            angle = 360 - angle;
+
+        return angle;
+    }
+
+    public void draw(Graphics2D g, int width, int height)
+    {
+        //height - y: odwrocenie Y
         if(isInfinite)
         {
             if (isVertical)
-                g.drawLine(xForVerticalLine, 0, xForVerticalLine, DisplayPanel.HEIGHT); //height constant
+                g.drawLine(xForVerticalLine, 0, xForVerticalLine, height); //height constant
             else
             {
                 //rysowanie linii niepionowej
                 int x1 = 0;
                 int y1 = (int) (a * x1 + b); // y = ax + b dla x = 0
-                int x2 = DisplayPanel.WIDTH;   //width constant
-                int y2 = (int) (a * x2 + b); // y = ax + b dla x = szerokość panelu
+                int y2 = (int) (a * width + b); // y = ax + b dla x = szerokość panelu
 
-                g.drawLine(x1, y1, x2, y2);
+                g.drawLine(x1, height - y1, width, height - y2);
             }
         }
         else
-            g.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+            g.drawLine(p1.getX(), height - p1.getY(), p2.getX(), height - p2.getY());
     }
 
 

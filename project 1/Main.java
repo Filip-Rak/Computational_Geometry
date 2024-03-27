@@ -1,11 +1,12 @@
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Main
 {
     public static void main(String[] args)
     {
         //Tworzenie okienka
-        DisplayFrame displayFrame = new DisplayFrame();
+        DisplayFrame dp1 = new DisplayFrame(false, 1200, 600);
 
         //Punkty
         Point p1 = new Point(100, 250); //linia l1
@@ -30,26 +31,26 @@ public class Main
         Line o5 = new Line(p9, p10, false); //poziomy, prawy dolny
 
         //Rysowane linie / odcinki
-        displayFrame.panel.AddDrawable(l1, Color.black);
-        displayFrame.panel.AddDrawable(o1, Color.yellow);
-        displayFrame.panel.AddDrawable(o2, Color.gray);
-        displayFrame.panel.AddDrawable(o3, Color.orange);
-        displayFrame.panel.AddDrawable(o4, new Color(51153255));
-        displayFrame.panel.AddDrawable(o5, Color.cyan);
+        dp1.panel.AddDrawable(l1, Color.black);
+        dp1.panel.AddDrawable(o1, Color.yellow);
+        dp1.panel.AddDrawable(o2, Color.gray);
+        dp1.panel.AddDrawable(o3, Color.orange);
+        dp1.panel.AddDrawable(o4, new Color(51153255));
+        dp1.panel.AddDrawable(o5, Color.cyan);
 
         //Rysowane punkty
-        displayFrame.panel.AddDrawable(p1, Color.blue);
-        displayFrame.panel.AddDrawable(p2, Color.blue);
-        displayFrame.panel.AddDrawable(p3, Color.blue);
-        displayFrame.panel.AddDrawable(p4, Color.blue);
-        displayFrame.panel.AddDrawable(p5, Color.blue);
-        displayFrame.panel.AddDrawable(p6, Color.blue);
-        displayFrame.panel.AddDrawable(p7, Color.blue);
-        displayFrame.panel.AddDrawable(p8, Color.blue);
-        displayFrame.panel.AddDrawable(p9, Color.blue);
-        displayFrame.panel.AddDrawable(p10, Color.blue);
-        displayFrame.panel.AddDrawable(tgt1, Color.red);
-        displayFrame.panel.AddDrawable(tgt2, Color.green);
+        dp1.panel.AddDrawable(p1, Color.blue);
+        dp1.panel.AddDrawable(p2, Color.blue);
+        dp1.panel.AddDrawable(p3, Color.blue);
+        dp1.panel.AddDrawable(p4, Color.blue);
+        dp1.panel.AddDrawable(p5, Color.blue);
+        dp1.panel.AddDrawable(p6, Color.blue);
+        dp1.panel.AddDrawable(p7, Color.blue);
+        dp1.panel.AddDrawable(p8, Color.blue);
+        dp1.panel.AddDrawable(p9, Color.blue);
+        dp1.panel.AddDrawable(p10, Color.blue);
+        dp1.panel.AddDrawable(tgt1, Color.red);
+        dp1.panel.AddDrawable(tgt2, Color.green);
 
         //Wyznaczenie rownanania prostej lini:
         System.out.println("Rownanie kierunkowe l1: " + l1.getStandardForm());
@@ -69,14 +70,14 @@ public class Main
 
         //Odbicie tgt2 wzgledem l1
         Point tgt2_2 = tgt2.mirrorOverLine(l1);
-        displayFrame.panel.AddDrawable(tgt2_2, Color.orange); //rysowanie tgt2_2
+        dp1.panel.AddDrawable(tgt2_2, Color.orange); //rysowanie tgt2_2
 
         //Punkt na przecieciu l1 i o3
         Point cross_1 = l1.findCrossPoint(o3);
 
         if(cross_1 != null)
         {
-            displayFrame.panel.AddDrawable(cross_1, new Color(1020102));
+            dp1.panel.AddDrawable(cross_1, new Color(1020102));
             System.out.println("Intersection point of l1 and o3 is at: x = " + cross_1.getX() + ", y = " + cross_1.getY());
         }
         else
@@ -87,7 +88,7 @@ public class Main
 
         if(cross_2 != null)
         {
-            displayFrame.panel.AddDrawable(cross_2, new Color(1020102));
+            dp1.panel.AddDrawable(cross_2, new Color(1020102));
             System.out.println("Intersection point of o4 and o3 is at: x = " + cross_2.getX() + ", y = " + cross_2.getY());
         }
         else
@@ -95,7 +96,7 @@ public class Main
 
 
         //Dystans punktu tgt_2 (zielony) do linii o3 (orange)
-        System.out.println("Distance from point tgt_2 (green) to line o3 (orange): " + tgt2.distanceToLine(o3));
+        System.out.println("Distance from point tgt_2 (green) to line o3 (orange): " + tgt2.distance(o3));
 
         //Trojkat
         try
@@ -121,24 +122,24 @@ public class Main
             Point[] t1v = t1.getVertices();
 
             //Rysowanie linii
-            displayFrame.panel.AddDrawable(tl1, Color.PINK);
-            displayFrame.panel.AddDrawable(tl2, Color.PINK);
-            displayFrame.panel.AddDrawable(tl3, Color.PINK);
+            dp1.panel.AddDrawable(tl1, Color.PINK);
+            dp1.panel.AddDrawable(tl2, Color.PINK);
+            dp1.panel.AddDrawable(tl3, Color.PINK);
 
             //Rysowanie trojkata
-            displayFrame.panel.AddDrawable(t1, new Color(255102255));
+            dp1.panel.AddDrawable(t1, new Color(255102255));
 
             //Rysowanie punktow
-            displayFrame.panel.AddDrawable(tp1, Color.red);
-            displayFrame.panel.AddDrawable(tp2, Color.red);
-            displayFrame.panel.AddDrawable(tp3, Color.red);
-            displayFrame.panel.AddDrawable(tp4, Color.red);
-            displayFrame.panel.AddDrawable(tp5, Color.red);
-            displayFrame.panel.AddDrawable(tp6, Color.red);
-            displayFrame.panel.AddDrawable(t1v[0], Color.cyan); //wierzcholek t1_1
-            displayFrame.panel.AddDrawable(t1v[1], Color.cyan); //wierzcholek t1_2
-            displayFrame.panel.AddDrawable(t1v[2], Color.cyan); //wierzcholek t1_3
-            displayFrame.panel.AddDrawable(tp7, Color.green);
+            dp1.panel.AddDrawable(tp1, Color.red);
+            dp1.panel.AddDrawable(tp2, Color.red);
+            dp1.panel.AddDrawable(tp3, Color.red);
+            dp1.panel.AddDrawable(tp4, Color.red);
+            dp1.panel.AddDrawable(tp5, Color.red);
+            dp1.panel.AddDrawable(tp6, Color.red);
+            dp1.panel.AddDrawable(t1v[0], Color.cyan); //wierzcholek t1_1
+            dp1.panel.AddDrawable(t1v[1], Color.cyan); //wierzcholek t1_2
+            dp1.panel.AddDrawable(t1v[2], Color.cyan); //wierzcholek t1_3
+            dp1.panel.AddDrawable(tp7, Color.green);
 
             //Boki trojkata
             System.out.print("T1 Lengths: ");
@@ -168,10 +169,10 @@ public class Main
         }
 
         //Kat pomiedzy l1 i o3:
-        System.out.println("Angle between l1 and o3: " + Line.angleBetweenLines(l1, o3));
+        System.out.println("Angle between l1 and o3: " + Line.angle180(l1, o3));
 
         //Kat pomiedzy o1 i o5:
-        System.out.println("Angle between o1 and o5: " + Line.angleBetweenLines(o1, o5));
+        System.out.println("Angle between o1 and o5: " + Line.angle180(o1, o5));
 
 
         //Tworzenie wielokata
@@ -188,14 +189,114 @@ public class Main
         Polygon w1 = new Polygon(wpv);
 
         //Rysowanie wielokatu
-        displayFrame.panel.AddDrawable(w1);
+        dp1.panel.AddDrawable(w1);
 
         //Rysowanie wierzcholkow
         for(Point vert : wpv)
-            displayFrame.panel.AddDrawable(vert, Color.blue);
+            dp1.panel.AddDrawable(vert, Color.blue);
 
         Point tgt_3 = new Point(660, 490);   //punkt testowy    //y = 480, 460 dla wierzcholka
-        displayFrame.panel.AddDrawable(tgt_3, Color.green);
+        dp1.panel.AddDrawable(tgt_3, Color.green);
         System.out.println("W1 contains tgt_3: " + w1.contains(tgt_3));
+
+
+        //otoczka
+        //Punkty
+        ArrayList<Point> pc1 = new ArrayList<>();
+        pc1.add(new Point(480, 100));
+        pc1.add(new Point(550, 80));
+        pc1.add(new Point(550, 120));
+        pc1.add(new Point(580, 150));
+        pc1.add(new Point(500, 140));
+        pc1.add(new Point(470, 140));
+        pc1.add(new Point(500, 85));
+        pc1.add(new Point(580, 125));
+        pc1.add(new Point(550, 170));
+        pc1.add(new Point(505, 185));
+
+        ArrayList<Point> pcv_1_jarvis = Polygon.jarvis_march_1(pc1);  //robienie otoczki
+
+        //rysowanie bokow otoczki
+        for(int i = 0; i < pcv_1_jarvis.size()-1; i++)
+        {
+            Line h = new Line(pcv_1_jarvis.get(i), pcv_1_jarvis.get(i+1), false);
+            dp1.panel.AddDrawable(h, new Color(255102255));
+        }
+
+        //rysowanie punktow
+        for(Point p : pc1)
+            dp1.panel.AddDrawable(p, Color.blue);
+
+        //rysowanie punktow otoczki
+        for(Point p : pcv_1_jarvis)
+            dp1.panel.AddDrawable(p, Color.cyan);
+
+
+        //rysowanie na nowym okienku
+        DisplayFrame dp2 = new DisplayFrame(true, 700, 500);
+
+        //Rysowanie otoczki wokol danych z pliku
+        //ArrayList<Point> pc2 = Point.loadFromFile("ksztalt_2.txt");
+        ArrayList<Point> pc2 = Point.loadFromFile("ksztalt_3.txt");
+
+        if(pc2 != null)
+        {
+            //przeskalowanie
+            int multiplier = 5;
+            for (Point point : pc2)
+            {
+                point.setY(point.getY() * multiplier);
+                point.setX(point.getX() * multiplier);
+            }
+
+            ArrayList<Point> pcv_2 = Polygon.jarvis_march_1(pc2);
+            System.out.println("Number of boundry points: " + pcv_2.size());
+
+            //rysowanie punktow
+            for(Point p : pc2)
+                dp2.panel.AddDrawable(p, new Color(255, 255, 0));
+
+            //rysowanie bokow otoczki
+            for(int i = 0; i < pcv_2.size()-1; i++)
+            {
+                Line h = new Line(pcv_2.get(i), pcv_2.get(i+1), false);
+                dp2.panel.AddDrawable(h, new Color(255102255));
+            }
+
+            //rysowanie wiercholkow otoczki
+            for(Point p : pcv_2)
+                dp2.panel.AddDrawable(p, Color.red);
+
+
+            //TEST
+            //utworzenie polygonu z otoczki, sprawdzenie czy istnieja punkty poza nia
+            //skopiuj arraylist do array
+            Point[] arr = new Point[pcv_2.size()];
+            for(int i = 0 ; i < pcv_2.size(); i++)
+                arr[i] = pcv_2.get(i);
+
+            Polygon tp = new Polygon(arr);
+
+            //sprawdz czy wszsytkie pkt sa w srodku otoczki
+            for (Point point : pcv_2)
+            {
+                if (!tp.contains(point))
+                {
+                    //System.out.println("X: " + point.getX() + " Y: " + point.getY());
+                    dp2.panel.AddDrawable(point, Color.blue);
+                }
+
+            }
+            //Wniosek
+            //Jarvis powinien wybierac dalszy punkt w przypadku podobnych katow
+            //test na wierzcholkach wykazal, ze to wlasnie wierzcholki sa 'na zewnatrz'
+            //sa one tam z powodu castowania double na int podczas tworzenia punktu
+            //otoczka jest rysowana dobrze, a metoda public static Point findCrossPoint(Line l1, Line l2)
+            //jest niedokladna ze wzgledu na to, ze obiekt Point ma koordynaty na int, nie double
+            //wsm to wiekszosc problemow wynika z wlasnie tych intow
+        }
+
+        dp1.panel.refreshBufferedImage();
+        dp2.panel.refreshBufferedImage();
     }
 }

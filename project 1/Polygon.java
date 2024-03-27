@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Polygon implements Drawable
 {
@@ -38,7 +39,7 @@ public class Polygon implements Drawable
 
         //upewnienie sie, ze jest poza figura
         destination = new Point(destination.getX(), destination.getY());
-        destination.translate(-50, 0);
+        destination.translate(-Integer.MAX_VALUE, 0);
         destination.setY(p.getY());
         Line ray = new Line(p, destination, false);
 
@@ -62,11 +63,143 @@ public class Polygon implements Drawable
             return count % 2 != 0;
     }
 
-    public void draw(Graphics2D g)
+    public static ArrayList<Point> jarvis_march_1(ArrayList<Point> input)
+    {
+        //kopia wejscia
+        ArrayList<Point> p_arr = new ArrayList<>();
+        for(Point p : input)
+            p_arr.add(new Point(p));
+
+        //znajdz punkt z najmniejszym y i x
+        Point p1 = p_arr.getFirst();
+        for(int i = 1; i < p_arr.size(); i++)
+        {
+            if(p_arr.get(i).getY() < p1.getY() || (p_arr.get(i).getY() == p1.getY() && p_arr.get(i).getX() < p1.getX()))
+                p1 = p_arr.get(i);
+        }
+
+        //punkt pomocniczy
+        Point p0 = new Point(-Integer.MAX_VALUE, p1.getY());
+
+        //wynik
+        ArrayList<Point> boundry = new ArrayList<>();
+        boundry.add(p1);
+
+        //tworzenie otoczki
+        Point start = p1;
+        while(!p_arr.isEmpty()) //popraw warunek polegajacy na znalezieniu pkt poczatkowego
+        {
+            Line l1 = new Line(p0, p1, false);
+            Line l2 = new Line(p1, p_arr.getFirst(), false);
+            Point max_p = p_arr.getFirst();
+            double max_angle = Line.angle360(l1, l2);
+            double max_distance = Point.distance(max_p, p1);
+
+            for(int i = 1; i < p_arr.size(); i++)
+            {
+                l2 = new Line(p1, p_arr.get(i), false);
+                double new_angle = Line.angle360(l1, l2);
+                double new_distance = Point.distance(p_arr.get(i), p1);
+
+                if(new_angle > max_angle || (equal(new_angle, max_angle, 0.1) && new_distance > max_distance))
+                {
+                    max_distance = Point.distance(p_arr.get(i), p1);
+                    max_angle = new_angle;
+                    max_p = p_arr.get(i);
+                }
+            }
+
+            boundry.add(max_p);
+            p_arr.remove(max_p);
+            p0 = p1;
+            p1 = max_p;
+
+            if(max_p == start)
+                break;
+        }
+
+        return boundry;
+    }
+
+    private static boolean equal(double d1, double d2, double margin)
+    {
+        return (Math.abs(d1 -d2) < margin);
+    }
+
+    public static ArrayList<Point> jarvis_march_2(ArrayList<Point> input)
+    {
+        //kopia wejscia
+        ArrayList<Point> p_arr = new ArrayList<>();
+        for(Point p : input)
+            p_arr.add(new Point(p));
+
+        //szukanie najblizszego i najdalszego punktu od poczatku ukladu
+        Point point_min = p_arr.getFirst();
+        Point point_max = p_arr.getFirst();
+        for(int i = 1; i < p_arr.size(); i++)
+        {
+            //mapowanie
+            Point p = p_arr.get(i);
+
+            if(p.getY() < point_min.getY() || p.getY() == point_min.getY() && p.getX() < point_min.getX())
+                point_min = p;
+            else if(p.getY() > point_max.getY() || p.getY() == point_max.getY() && p.getX() > point_max.getX())
+                point_max = p;
+        }
+
+        //robienie otoczki
+        ArrayList<Point> result = new ArrayList<>();
+        result.add(point_min);
+
+        chain(result, p_arr, point_min, point_max, 1);
+        chain(result, p_arr, point_max, point_min, -1);
+
+
+        return result;
+    }
+
+    private static void chain(ArrayList<Point> result, ArrayList<Point> p_arr, Point startPoint, Point endPoint, int direction)
+    {
+        //wyznaczanie jednej strony lancucha
+        Point tgt = startPoint;
+        while(!((tgt.getX() == endPoint.getX()) && tgt.getY() == endPoint.getY()))
+        {
+            //stworz punkt na prawo/lewo od sprawdzanego punktu i narysuj linie
+            Point extension = new Point(tgt);
+            extension.translate(direction, 0);
+            Line l1 = new Line(tgt, extension, false);
+
+            //inicjalizacja sprawdzania
+            Point best = new Point(0, 0);
+            double min_angle = Double.MAX_VALUE;
+
+            for (Point point : p_arr)
+            {
+                Point p3 = new Point(point);
+
+                //utworz linie od p1 do p3 i porownaj z linia p1 extension
+                Line l2 = new Line(tgt, p3, false);
+
+                double new_angle = Line.angle360(l1, l2);
+                if (new_angle < min_angle)
+                {
+                    min_angle = new_angle;
+                    best = p3;
+                }
+            }
+
+            result.add(best);
+            tgt = best;
+            p_arr.remove(tgt);
+        }
+    }
+
+
+    public void draw(Graphics2D g, int width, int height)
     {
         //alternatywnie, uzyj wbudowanej funkcji
         for(Line l : this.lines)
-            g.drawLine(l.getP1().getX(), l.getP1().getY(), l.getP2().getX(), l.getP2().getY());
+            g.drawLine(l.getP1().getX(), height - l.getP1().getY(), l.getP2().getX(), height - l.getP2().getY());
     }
 
     //Getters

@@ -1,4 +1,8 @@
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Point implements Drawable
 {
@@ -14,13 +18,13 @@ public class Point implements Drawable
         //translateToScreenCenter();
     }
 
-    //Methods
-    void translateToScreenCenter()
+    Point(Point p)
     {
-            this.x += DisplayPanel.HEIGHT / 2;
-            this.y += DisplayPanel.WIDTH / 2;
+        this.x = p.getX();
+        this.y = p.getY();
     }
 
+    //Methods
     public String relationToLine(Line l)
     {
         //Ax + By + C < || > 0   //warunek
@@ -84,14 +88,20 @@ public class Point implements Drawable
         }
     }
 
-    public void draw(Graphics2D g)
+    public void draw(Graphics2D g, int width, int height)
     {
+        int X = this.x, Y = this.y;
+        //reverse Y
+        // X = X + width / 2;
+        //Y = Y + height / 2;
+        Y = height - Y;
+
         int diameter = 20;
         int radius = diameter / 2; //polowa srednicy
-        g.fillOval(this.x - radius, this.y - radius, diameter, diameter);
+        g.fillOval(X- radius, Y - radius, diameter, diameter);
     }
 
-    public double distanceToLine(Line ln)
+    public double distance(Line ln)
     {
         //przepisanie wartosci dla ultawnienia wizualizacji
         double x0 = this.getX(), x1 = ln.getP1().getX(), x2 = ln.getP2().getX();
@@ -103,7 +113,7 @@ public class Point implements Drawable
         return numerator / denominator;
     }
 
-    public static double distToPoint(Point p1, Point p2)
+    public static double distance(Point p1, Point p2)
     {
         //d = sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
 
@@ -126,6 +136,48 @@ public class Point implements Drawable
         double vy = y2 - y1;
 
         return new Point((int)vx, (int)vy);
+    }
+
+    public static ArrayList<Point> loadFromFile(String filename)
+    {
+        try
+        {
+            File input = new File(filename);
+            Scanner scanner = new Scanner(input);
+            int size = scanner.nextInt();
+
+            //utworz tablice i odczytaj plik
+            ArrayList<Point> arr = new ArrayList<Point>();
+
+            for(int i = 0; i < size; i++)
+            {
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+
+                arr.add(new Point(x, y));
+            }
+
+            return arr;
+        }
+        catch(FileNotFoundException f)
+        {
+            System.out.println("File " + filename +  "  not found!");
+            return null;
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+            return true;
+
+        // Check if obj is an instance of Point, if so cast it
+        if (!(obj instanceof Point other))
+            return false;
+
+        // Compare the data members and return accordingly
+        return this.getX() == other.getX() && this.getY() == other.getY();
     }
 
     //Getters

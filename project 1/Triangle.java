@@ -9,47 +9,33 @@ public class Triangle implements Drawable
 
     //Constructors
     //Note: Mozna sprowadzic oba konstruktory do jednego uzywajac interfejsu
-    Triangle(double[] coeff1, double[] coeff2, double[] coeff3) throws Exception
+    Triangle(double[] coeff1, double[] coeff2, double[] coeff3)
     {
         //Obliczanie wierzcholkow
         this.vertices[0] = Line.findCrossPoint(coeff1, coeff2);
         this.vertices[1] = Line.findCrossPoint(coeff1, coeff3);
         this.vertices[2] = Line.findCrossPoint(coeff3, coeff2);
 
-        //Sprawdzanie czy trojkat istnieje
-        for(Point p : vertices)
-        {
-            if(p == null)
-                throw new Exception("Invalid Traingle");
-        }
-
         //Obliczanie dlugosci bokow
-        this.lengths[0] = Point.distToPoint(vertices[0], vertices[1]);
-        this.lengths[1] = Point.distToPoint(vertices[1], vertices[2]);
-        this.lengths[2] = Point.distToPoint(vertices[2], vertices[0]);
+        this.lengths[0] = Point.distance(vertices[0], vertices[1]);
+        this.lengths[1] = Point.distance(vertices[1], vertices[2]);
+        this.lengths[2] = Point.distance(vertices[2], vertices[0]);
 
         //Obliczanie pochodnych wartosci
         this.surfaceArea = this.calcSurfaceArea();
     }
 
-    Triangle(Line l1, Line l2, Line l3) throws Exception
+    Triangle(Line l1, Line l2, Line l3)
     {
         //Obliczanie wierzhcolkow
         this.vertices[0] = Line.findCrossPoint(l1, l2);
         this.vertices[1] = Line.findCrossPoint(l1, l3);
         this.vertices[2] = Line.findCrossPoint(l2, l3);
 
-        //Sprawdzanie czy trojkat istnieje
-        for(Point p : vertices)
-        {
-            if(p == null)
-                throw new Exception("Invalid Traingle");
-        }
-
         //Obliczanie dlugosci bokow
-        this.lengths[0] = Point.distToPoint(vertices[0], vertices[1]);
-        this.lengths[1] = Point.distToPoint(vertices[1], vertices[2]);
-        this.lengths[2] = Point.distToPoint(vertices[2], vertices[0]);
+        this.lengths[0] = Point.distance(vertices[0], vertices[1]);
+        this.lengths[1] = Point.distance(vertices[1], vertices[2]);
+        this.lengths[2] = Point.distance(vertices[2], vertices[0]);
 
         //Obliczanie pochodnych wartosci
         this.surfaceArea = this.calcSurfaceArea();
@@ -62,9 +48,9 @@ public class Triangle implements Drawable
         vertices[2] = p3;
 
         //Obliczanie dlugosci bokow
-        this.lengths[0] = Point.distToPoint(vertices[0], vertices[1]);
-        this.lengths[1] = Point.distToPoint(vertices[1], vertices[2]);
-        this.lengths[2] = Point.distToPoint(vertices[2], vertices[0]);
+        this.lengths[0] = Point.distance(vertices[0], vertices[1]);
+        this.lengths[1] = Point.distance(vertices[1], vertices[2]);
+        this.lengths[2] = Point.distance(vertices[2], vertices[0]);
 
         //Obliczanie pochodnych wartosci
         this.surfaceArea = this.calcSurfaceArea();
@@ -101,9 +87,9 @@ public class Triangle implements Drawable
         Line l3 = new Line(p, vertices[2], false);
 
         //liczenie katow
-        double angle1 = Line.angleBetweenLines(l1, l2);
-        double angle2 = Line.angleBetweenLines(l1, l3);
-        double angle3 = Line.angleBetweenLines(l2, l3);
+        double angle1 = Line.angle180(l1, l2);
+        double angle2 = Line.angle180(l1, l3);
+        double angle3 = Line.angle180(l2, l3);
         double angle_sum = angle1 + angle2 + angle3;
 
         //margines bledu
@@ -114,16 +100,18 @@ public class Triangle implements Drawable
         return (angle_sum > lower_bound && angle_sum < upper_bound) || Double.isNaN(angle_sum);
     }
 
-    public void draw(Graphics2D g)
+    public void draw(Graphics2D g, int width, int height)
     {
-        int[] x = new int[] { vertices[0].getX(), vertices[1].getX(), vertices[2].getX() };
-        int[] y = new int[] { vertices[0].getY(), vertices[1].getY(), vertices[2].getY() };
+        //wbudowana metoda
+        //int[] x = new int[] { vertices[0].getX(), vertices[1].getX(), vertices[2].getX() };
+        //int[] y = new int[] { vertices[0].getY(), vertices[1].getY(), vertices[2].getY() };
 
-        //alternatywnie narysuj trzy linie
-        g.drawPolygon(x, y, 3);
+        //g.drawPolygon(x, y, 3);
 
-        //System.out.println("x = " + x[0] + ", " + x[1] + ", " + x[2]);
-        //System.out.println("y = " + y[0] + ", " + y[1] + ", " + y[2]);
+        //Alternatywa, rysiowanie trzech linii
+        g.drawLine(vertices[0].getX(), height - vertices[0].getY(), vertices[1].getX(), height - vertices[1].getY());
+        g.drawLine(vertices[2].getX(), height - vertices[2].getY(), vertices[1].getX(), height - vertices[1].getY());
+        g.drawLine(vertices[0].getX(), height - vertices[0].getY(), vertices[2].getX(), height - vertices[2].getY());
     }
 
     //Getters

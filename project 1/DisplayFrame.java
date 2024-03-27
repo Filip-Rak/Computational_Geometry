@@ -6,9 +6,9 @@ public class DisplayFrame extends JFrame
     DisplayPanel panel;
 
     //Constructor
-    DisplayFrame()
+    DisplayFrame(boolean bufferImage, int w, int h)
     {
-        panel = new DisplayPanel();
+        panel = new DisplayPanel(bufferImage, w , h);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.add(panel);
