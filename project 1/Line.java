@@ -274,24 +274,46 @@ public class Line implements Drawable
 
     public void draw(Graphics2D g, int width, int height)
     {
-        //height - y: odwrocenie Y
+        //calc the center shifting vals
+        int centerX = width / 2;
+        int centerY = height / 2;
+
         if(isInfinite)
         {
             if (isVertical)
-                g.drawLine(xForVerticalLine, 0, xForVerticalLine, height); //height constant
+            {
+                //for vertical lines, only X is adjusted
+                int newX = centerX + xForVerticalLine;
+                g.drawLine(newX, 0, newX, height); //height remains constant
+            }
+
             else
             {
-                //rysowanie linii niepionowej
-                int x1 = 0;
-                int y1 = (int) (a * x1 + b); // y = ax + b dla x = 0
-                int y2 = (int) (a * width + b); // y = ax + b dla x = szerokość panelu
+                //for non-vertical infinite lines
+                int x1 = 0; //start from the left edge
+                int x2 = width; //to the right edge of the panel
+                //calculate Y positions using the line equation, adjusted for the center origin
+                int y1 = (int) (a * (x1 - centerX) + b) + centerY; // y = ax + b, adjusted for x = 0
+                int y2 = (int) (a * (x2 - centerX) + b) + centerY; // y = ax + b, adjusted for x = width
 
-                g.drawLine(x1, height - y1, width, height - y2);
+                // Draw the line with adjusted coordinates
+                g.drawLine(x1, height - y1, x2, height - y2);
             }
         }
+
         else
-            g.drawLine(p1.getX(), height - p1.getY(), p2.getX(), height - p2.getY());
+        {
+            //adjust points for regular lines
+            int newX1 = p1.getX() + centerX;
+            int newY1 = centerY - p1.getY(); //invert Y and adjust
+            int newX2 = p2.getX() + centerX;
+            int newY2 = centerY - p2.getY(); //invert Y and adjust
+
+            //draw the line with new coordinates
+            g.drawLine(newX1, newY1, newX2, newY2);
+        }
     }
+
 
 
     //Getters

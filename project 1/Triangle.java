@@ -102,17 +102,23 @@ public class Triangle implements Drawable
 
     public void draw(Graphics2D g, int width, int height)
     {
-        //wbudowana metoda
-        //int[] x = new int[] { vertices[0].getX(), vertices[1].getX(), vertices[2].getX() };
-        //int[] y = new int[] { vertices[0].getY(), vertices[1].getY(), vertices[2].getY() };
+        int centerX = width / 2;
+        int centerY = height / 2;
 
-        //g.drawPolygon(x, y, 3);
+        //Adjust each vertex position to make the screen center as (0, 0)
+        int x0 = vertices[0].getX() + centerX;
+        int y0 = centerY - vertices[0].getY(); //Inverting Y axis
+        int x1 = vertices[1].getX() + centerX;
+        int y1 = centerY - vertices[1].getY(); //Inverting Y axis
+        int x2 = vertices[2].getX() + centerX;
+        int y2 = centerY - vertices[2].getY(); //Inverting Y axis
 
-        //Alternatywa, rysiowanie trzech linii
-        g.drawLine(vertices[0].getX(), height - vertices[0].getY(), vertices[1].getX(), height - vertices[1].getY());
-        g.drawLine(vertices[2].getX(), height - vertices[2].getY(), vertices[1].getX(), height - vertices[1].getY());
-        g.drawLine(vertices[0].getX(), height - vertices[0].getY(), vertices[2].getX(), height - vertices[2].getY());
+        //Draw lines between vertices with adjusted coordinates
+        g.drawLine(x0, y0, x1, y1);
+        g.drawLine(x1, y1, x2, y2);
+        g.drawLine(x2, y2, x0, y0);
     }
+
 
     //Getters
     Point[] getVertices() { return this.vertices; }
