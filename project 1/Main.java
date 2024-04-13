@@ -5,29 +5,22 @@ public class Main
 {
     public static void main(String[] args)
     {
-        //firstWindow();
-        //secondWindow();
-        thirdWindow();
-    }
-
-    static void firstWindow()
-    {
         //Tworzenie okienka
         DisplayFrame dp1 = new DisplayFrame(false, 1200, 600);
 
         //Punkty
-        Point p1 = new Point(-500, -50); //linia l1
-        Point p2 = new Point(-450, 150); //linia l1
-        Point p3 = new Point(400, -150); //odcinek o1
-        Point p4 = new Point(400, 250); //odcinek o1
-        Point p5 = new Point(-580, -160); //odcinek o3
-        Point p6 = new Point(-270, -190); //odcinek o3
-        Point p7 = new Point(-320, -290); //odcinek o4
-        Point p8 = new Point(-320, -130); //odcinek o4
-        Point p9 = new Point(250, 250); //odcinek o5
-        Point p10 = new Point(400, 250); //odcinek o5
-        Point tgt1 = new Point(-475, 50); //wolny
-        Point tgt2 = new Point(-440, 0); //wolny
+        Point p1 = new Point(100, 250); //linia l1
+        Point p2 = new Point(150, 450); //linia l1
+        Point p3 = new Point(1000, 150); //odcinek o1
+        Point p4 = new Point(1000, 550); //odcinek o1
+        Point p5 = new Point(20, 140);   //odcinek o3
+        Point p6 = new Point(330, 110);   //odcinek o3
+        Point p7 = new Point(280, 10);   //odcinek o4
+        Point p8 = new Point(280, 170);   //odcinek o4
+        Point p9 = new Point(850, 550);   //odcinek o5
+        Point p10 = new Point(1000, 550);   //odcinek o5
+        Point tgt1 = new Point(125, 350); //wolny
+        Point tgt2 = new Point(160, 300); //wolny
 
         //Linie / odcinki
         Line l1 = new Line(p1, p2, true);   //pionowy, lewa strona - pierwsza linia czarna
@@ -110,13 +103,13 @@ public class Main
         {
             //Tworzenie trojkata z wspolczynnikow 3 linii
             //Punkty
-            Point tp1 = new Point(-380, -50); //tl1
-            Point tp2 = new Point(-180, -30); //tl1
-            Point tp3 = new Point(-360, -100); //tl2
-            Point tp4 = new Point(-310, 100); //tl2
-            Point tp5 = new Point(-340, 90); //tl3
-            Point tp6 = new Point(-220, -80); //tl3
-            Point tp7 = new Point(-300, 0); //wolny
+            Point tp1 = new Point(220, 250);    //tl1
+            Point tp2 = new Point(420, 270);    //tl1
+            Point tp3 = new Point(240, 200);    //tl2
+            Point tp4 = new Point(290, 400);    //tl2
+            Point tp5 = new Point(260, 390);    //tl3
+            Point tp6 = new Point(380, 220);    //tl3
+            Point tp7 = new Point(300, 300);    //wolny
 
             //Linie
             Line tl1 = new Line(tp1, tp2, false);
@@ -185,24 +178,24 @@ public class Main
         //Tworzenie wielokata
         //Wierzholki
         Point[] wpv = {
-                new Point(-120, 240),
-                new Point(-80, 160),
-                new Point(100, 130),
-                new Point(80, 280),
-                new Point(-20, 260),
-                new Point(20, 180),
+                new Point(480, 540),
+                new Point(520, 460),
+                new Point(700, 430),
+                new Point(680, 580),
+                new Point(580, 560),
+                new Point(620, 480),
         };
 
         Polygon w1 = new Polygon(wpv);
 
-        //Rysowanie wielokata
+        //Rysowanie wielokatu
         dp1.panel.AddDrawable(w1);
 
         //Rysowanie wierzcholkow
         for(Point vert : wpv)
             dp1.panel.AddDrawable(vert, Color.blue);
 
-        Point tgt_3 = new Point(60, 190); //punkt testowy
+        Point tgt_3 = new Point(660, 490);   //punkt testowy    //y = 480, 460 dla wierzcholka
         dp1.panel.AddDrawable(tgt_3, Color.green);
         System.out.println("W1 contains tgt_3: " + w1.contains(tgt_3));
 
@@ -210,16 +203,16 @@ public class Main
         //otoczka
         //Punkty
         ArrayList<Point> pc1 = new ArrayList<>();
-        pc1.add(new Point(-120, -200));
-        pc1.add(new Point(-50, -220));
-        pc1.add(new Point(-50, -180));
-        pc1.add(new Point(-20, -150));
-        pc1.add(new Point(-100, -160));
-        pc1.add(new Point(-130, -160));
-        pc1.add(new Point(-100, -215));
-        pc1.add(new Point(-20, -175));
-        pc1.add(new Point(-50, -130));
-        pc1.add(new Point(-95, -115));
+        pc1.add(new Point(480, 100));
+        pc1.add(new Point(550, 80));
+        pc1.add(new Point(550, 120));
+        pc1.add(new Point(580, 150));
+        pc1.add(new Point(500, 140));
+        pc1.add(new Point(470, 140));
+        pc1.add(new Point(500, 85));
+        pc1.add(new Point(580, 125));
+        pc1.add(new Point(550, 170));
+        pc1.add(new Point(505, 185));
 
         ArrayList<Point> pcv_1_jarvis = Polygon.jarvis_march_1(pc1);  //robienie otoczki
 
@@ -238,17 +231,13 @@ public class Main
         for(Point p : pcv_1_jarvis)
             dp1.panel.AddDrawable(p, Color.cyan);
 
-        dp1.panel.refreshBufferedImage();
-    }
 
-    static void secondWindow()
-    {
         //rysowanie na nowym okienku
         DisplayFrame dp2 = new DisplayFrame(true, 700, 500);
 
         //Rysowanie otoczki wokol danych z pliku
         //ArrayList<Point> pc2 = Point.loadFromFile("ksztalt_2.txt");
-        ArrayList<Point> pc2 = Point.loadFromFile("input/shapes/ksztalt_3.txt");
+        ArrayList<Point> pc2 = Point.loadFromFile("ksztalt_3.txt");
 
         if(pc2 != null)
         {
@@ -260,12 +249,7 @@ public class Main
                 point.setX(point.getX() * multiplier);
             }
 
-            //Ksztalt znajduje sie w prawym gornym rogu ukladu, co generuje duzo pustego miejsca
-            //przesuniecie ksztaltu w lewo i w dol
-            for(Point p : pc2)
-                p.translate(-250, -250);
-
-            ArrayList<Point> pcv_2 = Polygon.jarvis_march_2(pc2);
+            ArrayList<Point> pcv_2 = Polygon.jarvis_march_1(pc2);
             System.out.println("Number of boundry points: " + pcv_2.size());
 
             //rysowanie punktow
@@ -311,26 +295,8 @@ public class Main
             //jest niedokladna ze wzgledu na to, ze obiekt Point ma koordynaty na int, nie double
             //wsm to wiekszosc problemow wynika z wlasnie tych intow
         }
+
+        dp1.panel.refreshBufferedImage();
         dp2.panel.refreshBufferedImage();
-    }
-
-    static void thirdWindow()
-    {
-        Simulation sim = new Simulation();
-        while (sim.isRunning())
-        {
-            sim.update();
-            sim.render();
-
-            //Wait a bit before refreshing. Swing sucks ass and going faster causes flickering
-            //FPS = 1 / delay in s
-            //6 ms = 166.67 FPS
-            //8 ms = 125 FPS
-            //16 ms = 62.5 FPS
-            //32 ms = 30.3 FPS
-
-            try { Thread.sleep(6); }
-            catch (InterruptedException e) { Thread.currentThread().interrupt(); }
-        }
     }
 }

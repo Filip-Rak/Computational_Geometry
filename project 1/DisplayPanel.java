@@ -1,9 +1,6 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +10,6 @@ public class DisplayPanel extends JPanel
     private final List<Color> colorList = new ArrayList<>();
     private BufferedImage bufferedImage;
     private final boolean useBufferedImage;
-    private BufferedImage bgImage = null;
     public int HEIGHT = 600;
     public int WIDTH = 1200;
 
@@ -26,7 +22,10 @@ public class DisplayPanel extends JPanel
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         if (useBufferedImage)
+        {
             bufferedImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            fillBufferedImage();
+        }
     }
 
     //Methods
@@ -77,38 +76,16 @@ public class DisplayPanel extends JPanel
         }
     }
 
-    public void refreshBufferedImage() {
+    public void refreshBufferedImage()
+    {
         if (useBufferedImage)
         {
-            Graphics2D g2d = bufferedImage.createGraphics();
-
-            // Check if bgImage is not null and draw it; otherwise, fill with white
-            if (bgImage != null)
-                g2d.drawImage(bgImage, 0, 0, WIDTH, HEIGHT, null); // Draw the image to fill the panel
-             else
-             {
-                g2d.setColor(Color.WHITE);
-                g2d.fillRect(0, 0, WIDTH, HEIGHT); // Fill with white as fallback
-            }
-
-            g2d.dispose();
-
-            // Now fill the buffered image with current drawable objects
             fillBufferedImage();
-
-            // Request the panel to repaint itself
             repaint();
+            drawableList.clear();
+            colorList.clear();
+            bufferedImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            fillBufferedImage();
         }
     }
-
-    //getters
-    public void setBackgroundImage(String path)
-    {
-        File f = new File(path);
-        try { bgImage = ImageIO.read(f); }
-        catch (IOException e) {
-            bgImage = null; // Image failed to load, so set to null
-        }
-    }
-
 }

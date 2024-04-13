@@ -91,15 +91,12 @@ public class Point implements Drawable
     public void draw(Graphics2D g, int width, int height)
     {
         int X = this.x, Y = this.y;
-
-        //make middle of the widnow (0, 0)
-        X += width / 2;
-        Y += height / 2;
-
         //reverse Y
+        // X = X + width / 2;
+        //Y = Y + height / 2;
         Y = height - Y;
 
-        int diameter = 12;   //20 is default
+        int diameter = 20;
         int radius = diameter / 2; //polowa srednicy
         g.fillOval(X- radius, Y - radius, diameter, diameter);
     }
@@ -190,5 +187,4 @@ public class Point implements Drawable
     //Setters
     void setX(int x) { this.x = x; }
     void setY(int y) { this.y = y; }
-    void setCords(int x, int y) { this.x = x; this.y = y; }
 }

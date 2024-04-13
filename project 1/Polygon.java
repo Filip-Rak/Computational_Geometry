@@ -5,7 +5,7 @@ public class Polygon implements Drawable
 {
     //Attributes
     private final Point[] verticies;
-    private Line[] lines;
+    private final Line[] lines;
 
     //Constructors
     Polygon(Point[] verts)
@@ -194,29 +194,12 @@ public class Polygon implements Drawable
         }
     }
 
-    public void translate(int dx, int dy)
-    {
-        for (Point p : verticies)
-            p.translate(dx, dy);
-
-        this.lines = calcLines();
-    }
 
     public void draw(Graphics2D g, int width, int height)
     {
+        //alternatywnie, uzyj wbudowanej funkcji
         for(Line l : this.lines)
-        {
-            //convert the coordinates of the first point of the line
-            int x1 = l.getP1().getX() + width / 2;
-            int y1 = (height / 2) - l.getP1().getY(); // Shift and invert Y
-
-            //convert the coordinates of the second point of the line
-            int x2 = l.getP2().getX() + width / 2;
-            int y2 = (height / 2) - l.getP2().getY(); // Shift and invert Y
-
-            //draw the line with adjusted coordinates
-            g.drawLine(x1, y1, x2, y2);
-        }
+            g.drawLine(l.getP1().getX(), height - l.getP1().getY(), l.getP2().getX(), height - l.getP2().getY());
     }
 
     //Getters
