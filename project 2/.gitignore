@@ -1,33 +1,9 @@
-# IntelliJ IDEA files
-.idea/
-*.iml
-*.ipr
-*.iws
-/workspace.xml
-/misc.xml
-httpRequests/
-
-# Java/Maven/Gradle specific
-/target/
-/build/
-!.mvn/wrapper/maven-wrapper.jar
-!gradle/wrapper/gradle-wrapper.jar
-/.gradle
-/maven-status/
-
-# OS specific
-.DS_Store
-Thumbs.db
-
-# Logs and databases
-*.log
-*.sql
-*.db
-
-# Shelf
+# Default ignored files
 /shelf/
-
-# Data sources
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
 
