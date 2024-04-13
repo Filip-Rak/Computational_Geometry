@@ -1,0 +1,32 @@
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.ipr
+*.iws
+/workspace.xml
+/misc.xml
+httpRequests/
+
+# Java/Maven/Gradle specific
+/target/
+/build/
+!.mvn/wrapper/maven-wrapper.jar
+!gradle/wrapper/gradle-wrapper.jar
+/.gradle
+/maven-status/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Logs and databases
+*.log
+*.sql
+*.db
+
+# Shelf
+/shelf/
+
+# Data sources
+/dataSources/
+/dataSources.local.xml
