@@ -30,3 +30,6 @@ Thumbs.db
 # Data sources
 /dataSources/
 /dataSources.local.xml
+
+# Output directory
+/out/
