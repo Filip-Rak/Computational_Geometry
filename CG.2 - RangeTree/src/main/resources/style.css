@@ -1,0 +1,22 @@
+node {
+    shape: circle; /* Makes the node shape a circle */
+    size: 30px; /* Adjusts the size of the node */
+    fill-color: blue; /* Sets the node's fill color */
+    stroke-mode: plain; /* Enables stroke drawing */
+    stroke-color: black; /* Color of the stroke */
+    stroke-width: 2px; /* Width of the stroke */
+
+    text-mode: normal; /* Shows the text */
+    text-background-mode: rounded-box; /* Background of the text */
+    text-background-color: yellow; /* Makes text background yellow for visibility */
+    text-color: black; /* Color of the text */
+    text-size: 16; /* Size of the text */
+    text-padding: 2px; /* Padding around text */
+    text-alignment: center; /* Positions text above the node */
+}
+
+edge {
+    fill-color: black; /* Color of the edges */
+    size: 2px; /* Thickness of the edges */
+    arrow-size: 10px, 5px; /* Size of the arrow at the edge's end */
+}
