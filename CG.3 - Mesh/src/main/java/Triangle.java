@@ -86,6 +86,11 @@ public class Triangle implements Drawable
         return Math.abs(sumOfAngles - 180) < 0.001; // Allowing a small margin for floating point arithmetic
     }
 
+    public static boolean saveToFile(String filename)
+    {
+        return false;
+    }
+
     // Getters
     public Point getVertice(int index)
     {

@@ -1,167 +1,226 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Mesh
 {
     // Attributes
-    double range;
-    CircularList points;
-    LinkedList<Triangle> triangles;
-    int iter = 0;
-    int idle = 0;
+    // Storage
+    private ArrayList<Polygon> blank_spots;
+    private CircularList points;
+    private LinkedList<Triangle> triangles;
 
-    // Constructor
-    Mesh(ArrayList<Point> input, double range)
+    // Building
+    private double snap_range;
+    private double snap_range_multiplier;
+    private double height_multiplier;
+    private double angle_Threshold;
+    private double determination;
+    private int ceil;
+
+    // Trackers
+    private int current_range_failures;
+    private int failed_insertions;
+    private int iteration;
+
+    // Visualization
+    private int delay;
+    private DisplayFrame dp;
+
+    // Constructors
+    Mesh(ArrayList<Point> p_arr, int stride, double snap_range, double snap_range_multiplier, double height_multiplier, double determination, int ceil, int delay)
     {
-        initVars(input, range);
+        initVars(p_arr, stride, snap_range, snap_range_multiplier, height_multiplier, determination, ceil, delay,null);
         buildMesh();
     }
 
-    // Init Methods
-    void initVars(ArrayList<Point> input, double range)
+    Mesh(ArrayList<Point> p_arr, int stride, double snap_range, double snap_range_multiplier, double height_multiplier, double determination, int ceil, int delay, ArrayList<Polygon> blind_spots)
     {
-        points = new CircularList(input);
-        triangles = new LinkedList<>();
-        this.range = range;
+        initVars(p_arr, stride, snap_range, snap_range_multiplier, height_multiplier, determination, ceil, delay, blind_spots);
+        buildMesh();
     }
 
-    void buildMesh()
+    // Initialization
+    private void initVars(ArrayList<Point> p_arr, int stride, double snapRange, double multi, double height_multiplier, double determination, int ceil, int delay, ArrayList<Polygon> blind_spots)
     {
-        while (points.size() > 2 && iter <= 500)
+        // Lists
+        points = new CircularList();
+        for(int i = 0; i < p_arr.size(); i += stride)
+            points.add(p_arr.get(i));
+
+        this.triangles = new LinkedList<>();
+
+        // Hit box
+        if(blind_spots != null) // Has custom hit box
+            this.blank_spots = new ArrayList<>(blind_spots);
+        else
         {
-            iter++;
+            // No hitbox, generate one
+            this.blank_spots = new ArrayList<>();
+            this.blank_spots.add(new Polygon(points.copy()));
+        }
 
-            // Save points to buffer
-            // DA and DB are potential third points
+        // Modifiers
+        this.snap_range = snapRange;
+        this.snap_range_multiplier = multi;
+        this.determination = determination;
+        this.height_multiplier = height_multiplier;
 
-            System.out.println("index: " + points.getCurrentIndex() + " Size: " + points.size());
+        // Visualization
+        this.delay = delay;
+        dp = new DisplayFrame(true, 800, 600);
 
+        for(Polygon p : blank_spots)
+            dp.panel.AddDrawable(p, Color.black);
+
+        for(Point p : points.copy())
+            dp.panel.AddDrawable(p, Color.BLUE);
+
+
+        // Trackers
+        this.current_range_failures = 0;
+        this.failed_insertions = 0;
+        this.iteration = 0;
+
+        // Constants
+        this.angle_Threshold = 0;
+        this.ceil = ceil;
+    }
+
+    // Building methods
+    private void buildMesh()
+    {
+        while(points.size() >= 3 && failed_insertions < (points.size() * determination) && iteration < ceil)
+        {
+            iteration++;
+
+            System.out.println(
+                    "----------------------------------------------------\n" +
+                            "Iteration: " + iteration + ", Size: " +  points.size() +
+                            ", Index: " + points.getCurrentIndex() +
+                            ", Currrent range failures: " + current_range_failures +
+                            ", Failed insertions: " + failed_insertions
+            );
+
+            // Get A, B and their neighbours
             Point DA = points.getNext();
             Point A = points.getNext();
             Point B = points.getNext();
             Point DB = points.getNext();
 
-            // Calculate C point for an equilateral triangle
+            // Calculate C
             Point C = calculateC(A, B);
+            //dp.panel.AddDrawable(C, Color.yellow);
 
-            // Check if DA or DB is withing range of C
-            if(domesticPointUsed(A, B, C, DA, DB))
-                points.offset(-3);  // Repeat current interation for new A and B. One got deleted
-            else if(calculatedPointUsed(A, B, C))    // neither in range
-                points.offset(-3);  // Addvance 1 if nothing added, advance 2 if C added
-            else
+            System.out.println("DA: " + DA.getX() + " " + DA.getY() +
+                    "\nA: " + A.getX() + " " + A.getY() +
+                    "\nB: " + B.getX() + " " + B.getY() +
+                    "\nDB: " + DB.getX() + " " + DB.getY() +
+                    "\nC: " + C.getX() + " " + C.getY()
+            );
+
+
+            // Deciding if to add / delete or skip
+            if(tryDomestic(A, B, C, DA, DB))  // we deleted one point
             {
+                // We want to repeat the iteration, but we deleted either A or B, so we go back 3 instead of 4
                 points.offset(-3);
-                idle++;
+                current_range_failures = 0;
+                failed_insertions = 0;
+                dp.panel.AddDrawable(triangles.getLast(), Color.green);
+            }
+            else if(tryCalculated(A, B, C)) // added new point
+            {
+                // We want to make new A = previous B. We added C so we go back by 2
+                points.offset(-2);
+                current_range_failures = 0;
+                failed_insertions = 0;
+                dp.panel.AddDrawable(triangles.getLast(), Color.green);
+            }
+            else    //couldnt add anything
+            {
+                points.offset(-2);  // We want to advance by 1, since we dint add C with -2 A will become B
 
-                if(idle >= 40)
+                if(current_range_failures > points.size())
                 {
-                    range *= 1.1;
-                    idle = 0;
-                    System.out.println("BuildMesh: NOTHING VALID, INCREASING RANGE");
+                    current_range_failures = 0;
+                    snap_range *= snap_range_multiplier;
                 }
-            }
-        }
 
+                current_range_failures++;
+                failed_insertions++;
+            }
+
+            dp.panel.refreshBufferedImage();
+
+            try{Thread.sleep(delay);}
+            catch (Exception ignore){}
+        }
     }
 
-    public boolean calculatedPointUsed(Point A, Point B, Point C)
+    private boolean tryCalculated(Point A, Point B, Point C)
     {
-        if(!inRange(points.copy(), C))
+        if(!intersection(A, B, C))
         {
-            System.out.println("CalcalculatedPointUsed: NOTHING IN RANGE OF C");
-            Polygon p = new Polygon(points.copy());
-            if(!p.intersects(A, C) || p.intersects(B, C))
-            {
-                System.out.println("CalcalculatedPointUsed: DOES NOT INTERSECT. INSERTED");
-                points.add(C, B);
-                triangles.add(new Triangle(A , C, B));
-                return true;
-            }
-            System.out.println("CalcalculatedPointUsed: INTERSECTS");
-        }
-        else
-            System.out.println("CalcalculatedPointUsed:  IN RANGE");
-
-        return false;
-    }
-
-    private boolean domesticPointUsed(Point A, Point B, Point C, Point DA, Point DB)
-    {
-        // both in range, get the better one
-        if(inRange(DA, C) && inRange(DB, C))
-        {
-            if(Triangle.isValid(A, B, C))
-            {
-                System.out.println("domesticPointUsed: TRIANGLE IS VALID");
-
-                Point D = betterTriangle(A, B, DA, DB);
-                Triangle ABD = new Triangle(A, B, D);
-
-                if(D == DA) // D = A's neighbour
-                    points.remove(A);
-                else    //D = B's neighbour
-                    points.remove(B);
-
-                triangles.add(ABD);
-
-                System.out.println("domesticPointUsed: BOTH WERE GOOD");
-            }
-
-        }
-        // A's neighbour in range only
-        else if(inRange(DA, C))
-        {
-            if(Triangle.isValid(A, B, C))
-            {
-                triangles.add(new Triangle(A, B, DA));
-                points.remove(A);
-                System.out.println("domesticPointUsed: DA WAS GOOD");
-            }
-
-        }
-        // B's neighbour in range only
-        else if(inRange(DB, C))
-        {
-            if(Triangle.isValid(A, B, C))
-            {
-                triangles.add(new Triangle(A, B, DA));
-                points.remove(B);
-                System.out.println("domesticPointUsed: DB WAS GOOD");
-            }
-
+            System.out.println("TRYCALCULATED: inside, no intersections. C INSERTED");
+            triangles.add(new Triangle(A, B, C));
+            dp.panel.AddDrawable(C, Color.RED);
+            points.add(C, B);
+            return true;
         }
         else
         {
-            System.out.println("domesticPointUsed: NO VALID POINTS");
+            System.out.println("TRYCALCULATED: outside or intersects");
             return false;
         }
 
-        return true;
     }
 
-    private boolean inRange(Point D, Point origin)
+    private boolean tryDomestic(Point A, Point B, Point C, Point DA, Point DB)
     {
-        return Math.abs(Point.distance(D, origin)) < range;
-    }
+        boolean DA_valid = inRange(DA, C) && !intersection(A, B, DA) && Triangle.validateAngles(A, B, DA, angle_Threshold);
+        boolean DB_valid = inRange(DB, C) && !intersection(A, B, DB) && Triangle.validateAngles(A, B, DB, angle_Threshold);
 
-    private boolean inRange(LinkedList<Point> list, Point origin)
-    {
-        for(Point p : list)
+        boolean skip_DA = false;
+
+        if(DA_valid && DB_valid)
         {
-            if(inRange(p, origin))
-                return true;
+            System.out.println("tryDomestic: BOTH VALID");
+
+            if(DB_is_better(A, B, DA, DB))
+                skip_DA = true;
         }
+
+        if(DA_valid && !skip_DA)
+        {
+            System.out.println("TRYDOMESTIC: DA IS VALID, DA INSERTED");
+            // DA becomes the tip
+            triangles.add(new Triangle(A, B, DA));
+            points.remove(A);
+
+            return true;
+        }
+        else if(DB_valid)
+        {
+            System.out.println("TRYDOMESTIC: DB IS VALID, DB INSERTED");
+            // DB becomes the tip
+            triangles.add(new Triangle(A, B, DB));
+            points.remove(B);
+
+            return true;
+        }
+        else
+            System.out.println("TRYDOMESTIC: BOTH INVALID");
 
         return false;
     }
 
-    private Point betterTriangle(Point A, Point B, Point DA, Point DB)
+    private boolean DB_is_better(Point A, Point B, Point DA, Point DB)
     {
         double differenceDA = calculateTriangleQuality(A, B, DA);
         double differenceDB = calculateTriangleQuality(A, B, DB);
 
-        return differenceDA < differenceDB ? DA : DB;
+        return differenceDB < differenceDA;
     }
 
     private double calculateTriangleQuality(Point A, Point B, Point C)
@@ -174,27 +233,56 @@ public class Mesh
         return Math.abs(AB - average) + Math.abs(AC - average) + Math.abs(BC - average);
     }
 
-
-    private LinkedList<Point> within_range(Point origin, LinkedList<Edge> list, double range, Point ignore1, Point ignore2)
+    private boolean inRange(Point D, Point origin)
     {
-        LinkedList<Point> result = new LinkedList<>();
+        return Math.abs(Point.distance(D, origin)) < snap_range;
+    }
 
-        for(Edge e : list)
+    public boolean intersection(Point A, Point B, Point C)
+    {
+        Line AB = new Line(A, B, false);
+        Line AC = new Line(A, C, false);
+        Line CB = new Line(C, B, false);
+
+        // Checks for line intersections
+        for(Triangle t : triangles)
         {
-            if(e.getP1() != ignore1 && e.getP1() != ignore2 && Point.distance(e.getP1(), origin) <= range)
-                result.add(e.getP1());
-
-            if(e.getP2() != ignore1 && e.getP2() != ignore2 && Point.distance(e.getP2(), origin) <= range)
-                result.add(e.getP2());
+            LinkedList<Line> lines = t.getLines();
+            if(lineIntersection(lines, AB, AC, CB))
+                return true;
         }
 
-        return result;
+        for(Polygon pol : blank_spots)
+        {
+            LinkedList<Line> lines = pol.getLines();
+            if(lineIntersection(lines, AB, AC, CB))
+                return true;
+        }
+
+        return false;
+    }
+
+    private boolean lineIntersection(LinkedList<Line> lines, Line AB, Line AC, Line CB)
+    {
+        for(Line l: lines)
+        {
+            Point p1 = Line.findCrossPoint(AB, l);
+            if(p1 != null && !Line.commonPoints(AB, l)) return true;
+
+            Point p2 = Line.findCrossPoint(AC, l);
+            if(p2 != null && !Line.commonPoints(AC, l)) return true;
+
+            Point p3 = Line.findCrossPoint(CB, l);
+            if(p3 != null&& !Line.commonPoints(CB, l)) return true;
+        }
+
+        return false;
     }
 
     private Point calculateC(Point A, Point B)
     {
         double a = Point.distance(A, B);
-        double height = a * 0.86602540378; //a *  (Math.sqrt(3)) / 2);
+        double height = a * 0.86602540378 * height_multiplier; //a *  (Math.sqrt(3)) / 2);
 
         Point normal = new Point(B.y - A.y, -(B.x - A.x));
 
@@ -211,6 +299,8 @@ public class Mesh
     }
 
     // Getters
-    LinkedList<Triangle> getTriangles() { return this.triangles; }
-    LinkedList<Point> getPoints() { return this.points.copy(); }
+    public LinkedList<Triangle> getTriangles()
+    {
+        return this.triangles;
+    }
 }
