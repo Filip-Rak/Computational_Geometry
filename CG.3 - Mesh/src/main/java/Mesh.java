@@ -17,7 +17,9 @@ public class Mesh
 
     // Building
     private double snap_range;
+    private boolean custom_snap_range;
     private double snap_range_multiplier;
+    private double snap_range_multiplier_sum;
     private double height_multiplier;
     private double angle_Threshold;
     private double determination;
@@ -66,8 +68,17 @@ public class Mesh
         }
 
         // Modifiers
+        if(snapRange <= 0)
+            custom_snap_range = false;
+        else
+        {
+            custom_snap_range = true;
+            this.snap_range = snapRange;
+        }
+
         this.snap_range = snapRange;
         this.snap_range_multiplier = multi;
+        this.snap_range_multiplier_sum = 1;
         this.determination = determination;
         this.height_multiplier = height_multiplier;
 
@@ -149,7 +160,11 @@ public class Mesh
                 if(current_range_failures > points.size())
                 {
                     current_range_failures = 0;
-                    snap_range *= snap_range_multiplier;
+
+                    if(custom_snap_range)
+                        snap_range *= snap_range_multiplier;
+                    else
+                        snap_range_multiplier_sum *= snap_range_multiplier;
                 }
 
                 current_range_failures++;
@@ -288,6 +303,9 @@ public class Mesh
     {
         double a = Point.distance(A, B);
         double height = a * 0.86602540378 * height_multiplier; //a *  (Math.sqrt(3)) / 2);
+
+        if(!custom_snap_range)
+            snap_range = (height / 2) * snap_range_multiplier_sum;
 
         Point normal = new Point(B.y - A.y, -(B.x - A.x));
 

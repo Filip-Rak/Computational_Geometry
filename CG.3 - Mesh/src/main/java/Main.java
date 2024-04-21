@@ -6,8 +6,8 @@ public class Main
 {
     public static void main(String[] args)
     {
-        //M1();   // Alien
-        //M2();   // Pacman eyless
+        M1();   // Alien
+        //M2();   // Pacman blind
         //M3();   // Pacman with eyes
         //M4();   // 'Rectangle'
 
@@ -38,6 +38,7 @@ public class Main
             Point.transformArray(p_arr, 0.5, 0.5, -300, -200);
 
             Mesh mesh = new Mesh(p_arr, 8, 12, 1.5,1,  4, 600, 50);
+            //Mesh mesh = new Mesh(p_arr, 8, -1, 1.5,1,  4, 1200, 5);
 
             DisplayFrame window = new DisplayFrame(true, 800, 600);
             LinkedList<Triangle> p = mesh.getTriangles();
@@ -90,7 +91,8 @@ public class Main
         if(p_arr != null)
         {
             Point.transformArray(p_arr, 0.5, 0.5, -300, -200);
-            Mesh mesh = new Mesh(p_arr, 6 , 16, 2, 1.2, 2, 600, 10);
+            //Mesh mesh = new Mesh(p_arr, 6 , 16, 2, 1.2, 2, 600, 10);
+            Mesh mesh = new Mesh(p_arr, 6 , -1, 1.5, 1, 2, 600, 10);
 
             DisplayFrame window = new DisplayFrame(true, 800, 600);
             LinkedList<Triangle> p = mesh.getTriangles();
@@ -113,6 +115,7 @@ public class Main
             Point.transformArray(p_arr, 0.5, 0.5, -300, -200);
 
             Mesh mesh = new Mesh(p_arr, 8, 24, 3, 1.4, 4, 400, 100);
+            //Mesh mesh = new Mesh(p_arr, 8, -1, 2, 1, 4, 400, 100);
 
             DisplayFrame window = new DisplayFrame(true, 800, 600);
             LinkedList<Triangle> p = mesh.getTriangles();
