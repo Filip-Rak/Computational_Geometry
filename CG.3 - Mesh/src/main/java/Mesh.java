@@ -1,6 +1,11 @@
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Mesh
 {
@@ -296,6 +301,73 @@ public class Mesh
 
         // Calculate C
         return new Point(midpoint.x + normal.x * height, midpoint.y + normal.y * height);
+    }
+
+    // Public methods
+    public void outputToFile(String filename, boolean append)
+    {
+        try
+        {
+            FileWriter writer = new FileWriter(filename, append);
+
+            writer.write(triangles.size() + "\n");
+
+            for(Triangle t: triangles)
+            {
+                for(Point p : t.getVerticies())
+                {
+                    writer.write(p.getX() + " " + p.getY() + " ");
+                }
+
+                writer.write("\n");
+            }
+
+            writer.close();
+        }
+        catch (IOException exception)
+        {
+            System.out.println(exception.getMessage());
+        }
+
+    }
+
+    public static LinkedList<Triangle> loadFromFile(String filename)
+    {
+        try
+        {
+            File input = new File(filename);
+            Scanner scanner = new Scanner(input);
+
+            // Get file size
+            int size = scanner.nextInt();
+
+            // Create a list, load contents
+            LinkedList<Triangle> triangles = new LinkedList<>();
+            for(int i = 0; i < size; i++)
+            {
+                double x1 = scanner.nextDouble();
+                double y1 = scanner.nextDouble();
+
+                double x2 = scanner.nextDouble();
+                double y2 = scanner.nextDouble();
+
+                double x3 = scanner.nextDouble();
+                double y3 = scanner.nextDouble();
+
+                Point A = new Point(x1, y1);
+                Point B = new Point(x2, y2);
+                Point C = new Point(x3, y3);
+
+                triangles.add(new Triangle(A, B, C));
+            }
+
+            return triangles;
+        }
+        catch(FileNotFoundException f)
+        {
+            System.out.println("File " + filename +  " not found!");
+            return null;
+        }
     }
 
     // Getters

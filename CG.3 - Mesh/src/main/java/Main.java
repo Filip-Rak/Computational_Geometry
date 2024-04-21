@@ -10,6 +10,23 @@ public class Main
         //M2();   // Pacman eyless
         //M3();   // Pacman with eyes
         //M4();   // 'Rectangle'
+
+        //Load();   // Loading saved mesh
+    }
+
+    private static void Load()
+    {
+        LinkedList<Triangle> mesh = Mesh.loadFromFile("output/rectangle.txt");
+
+        if(mesh != null)
+        {
+            DisplayFrame window = new DisplayFrame(true, 800, 600);
+
+            for(Triangle t : mesh)
+                window.panel.AddDrawable(t, Color.green);
+
+            window.panel.refreshBufferedImage();
+        }
     }
 
     private static void M4()
@@ -29,6 +46,8 @@ public class Main
                 window.panel.AddDrawable(t, Color.black);
 
             window.panel.refreshBufferedImage();
+
+            mesh.outputToFile("output/rectangle.txt", false);
         }
     }
 
@@ -57,6 +76,8 @@ public class Main
                 window.panel.AddDrawable(t, Color.black);
 
             window.panel.refreshBufferedImage();
+
+            mesh.outputToFile("output/pacman.txt", false);
         }
 
 
@@ -78,6 +99,8 @@ public class Main
                 window.panel.AddDrawable(t, Color.black);
 
             window.panel.refreshBufferedImage();
+
+            mesh.outputToFile("output/pacman_eyeless.txt", false);
         }
     }
 
@@ -98,6 +121,8 @@ public class Main
                 window.panel.AddDrawable(t, Color.black);
 
             window.panel.refreshBufferedImage();
+
+            mesh.outputToFile("output/kurwinox.txt", false);
         }
     }
 }

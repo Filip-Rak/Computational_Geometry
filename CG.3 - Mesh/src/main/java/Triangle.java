@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -84,11 +86,6 @@ public class Triangle implements Drawable
 
         // Check if the sum of angles is approximately 180 degrees
         return Math.abs(sumOfAngles - 180) < 0.001; // Allowing a small margin for floating point arithmetic
-    }
-
-    public static boolean saveToFile(String filename)
-    {
-        return false;
     }
 
     // Getters
