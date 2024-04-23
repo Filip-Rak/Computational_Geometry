@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -6,8 +7,74 @@ public class Main
 {
     public static void main (String[] args)
     {
-        M1();
+        //M1();
+        M2();
+        //M3();
         //pg2();
+        //pg3();
+    }
+
+    private static void M3()
+    {
+        LinkedList<Point> points = new LinkedList<>();
+        points.add(new Point(0, -250));
+        points.add(new Point(50, -200));
+        points.add(new Point(100, -100));
+        points.add(new Point(250, 0));
+        points.add(new Point(100, 100));
+        points.add(new Point(50, 200));
+        points.add(new Point(0, 250));
+        points.add(new Point(-100, 100));
+        points.add(new Point(-250, 0));
+        points.add(new Point(-100, -100));
+
+        Triangulation t = new Triangulation(points, 1.5, 0);
+        LinkedList<Triangle> mesh = t.getTriangles();
+
+        DisplayFrame window = new DisplayFrame(true, 800, 600);
+        for(Triangle triangle : mesh)
+            window.panel.AddDrawable(triangle);
+
+        window.panel.refreshBufferedImage();
+
+    }
+
+    private static void M2()
+    {
+        LinkedList<Point> points = new LinkedList<>();
+        points.add(new Point(0, -200));
+        points.add(new Point(100, -100));
+        points.add(new Point(200, 0));
+        points.add(new Point(100, 100));
+        points.add(new Point(0, 200));
+        points.add(new Point(-100, 100));
+        points.add(new Point(-200, 0));
+        points.add(new Point(-100, -100));
+
+        Triangulation t = new Triangulation(points, 1.5, 100);
+        LinkedList<Triangle> mesh = t.getTriangles();
+
+        DisplayFrame window = new DisplayFrame(true, 800, 600);
+        for(Triangle triangle : mesh)
+            window.panel.AddDrawable(triangle);
+
+        window.panel.refreshBufferedImage();
+
+    }
+
+    private static void pg3()
+    {
+        LinkedList<Point> inp = prepareInput("input/kurwinox.txt");
+
+        if(inp != null)
+        {
+            DisplayFrame window = new DisplayFrame(true, 800, 600);
+
+            for(Point p : inp)
+                window.panel.AddDrawable(p);
+
+            window.panel.refreshBufferedImage();
+        }
     }
 
     private static void pg2()
@@ -81,7 +148,7 @@ public class Main
 
         if(points != null)
         {
-            Triangulation t = new Triangulation(points, 1.5, 1000);
+            Triangulation t = new Triangulation(points, 1.5, 0);
             LinkedList<Triangle> mesh = t.getTriangles();
 
             DisplayFrame window = new DisplayFrame(true, 800, 600);

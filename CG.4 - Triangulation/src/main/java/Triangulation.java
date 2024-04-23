@@ -89,9 +89,9 @@ public class Triangulation
         triangles.add(new Triangle(s_verts.get(2), s_verts.get(1), points.getFirst()));
         triangles.add(new Triangle(s_verts.get(2), s_verts.get(0), points.getFirst()));
 
-        window.panel.AddDrawable(triangles.get(0), Color.green);
-        window.panel.AddDrawable(triangles.get(1), Color.green);
-        window.panel.AddDrawable(triangles.get(2), Color.green);
+        window.panel.AddDrawable(triangles.get(0), Color.BLUE);
+        window.panel.AddDrawable(triangles.get(1), Color.BLUE);
+        window.panel.AddDrawable(triangles.get(2), Color.BLUE);
     }
 
     // Triangulation methods
@@ -146,6 +146,7 @@ public class Triangulation
 
         removeTriangles(toRemove);
         window.panel.removeDrawable(superTriangle);
+        refreshVisualization();
 
     }
 
