@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,8 +6,8 @@ public class Main
 {
     public static void main (String[] args)
     {
-        //M1();
-        M2();
+        M1();
+        //M2();
         //M3();
         //pg2();
         //pg3();
@@ -148,7 +147,7 @@ public class Main
 
         if(points != null)
         {
-            Triangulation t = new Triangulation(points, 1.5, 0);
+            Triangulation t = new Triangulation(points, 1.5, 10);
             LinkedList<Triangle> mesh = t.getTriangles();
 
             DisplayFrame window = new DisplayFrame(true, 800, 600);

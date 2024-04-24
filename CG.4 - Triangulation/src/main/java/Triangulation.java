@@ -33,12 +33,12 @@ public class Triangulation
     // Initialization methods
     private void initStorage(LinkedList<Point> pointsInput)
     {
-        // Save all triangle vertices as points
-        this.points = new LinkedList<>();
-        this.points.addAll(pointsInput);
+        // Save points and prepare triangle storage
+        this.points = new LinkedList<>(pointsInput);
+        this.triangles = new LinkedList<>();
 
-        triangles = new LinkedList<>();
-        superTriangle = calcSupTriangle();
+        // Calculate the super triangle
+        this.superTriangle = calcSupTriangle();
     }
 
     private Triangle calcSupTriangle()
@@ -82,13 +82,13 @@ public class Triangulation
 
     private void initTriangulation()
     {
-        // Get superTriangle's verticies and make tringles with first point
-        // This triangles should likely be handled at the end, during super tringle deletion
+        // Get superTriangle's verticies and make tringles with the first point
         LinkedList<Point> s_verts = superTriangle.getVerticesList();
         triangles.add(new Triangle(s_verts.get(0), s_verts.get(1), points.getFirst()));
         triangles.add(new Triangle(s_verts.get(2), s_verts.get(1), points.getFirst()));
         triangles.add(new Triangle(s_verts.get(2), s_verts.get(0), points.getFirst()));
 
+        // Add newly made triangles to visualization
         window.panel.AddDrawable(triangles.get(0), Color.BLUE);
         window.panel.AddDrawable(triangles.get(1), Color.BLUE);
         window.panel.AddDrawable(triangles.get(2), Color.BLUE);
@@ -100,7 +100,6 @@ public class Triangulation
         for(int i = 1; i < points.size(); i++)
         {
             Point currentPoint = points.get(i);
-
             window.panel.AddDrawable(currentPoint, Color.YELLOW);
 
             // Find all broken traingles and delete them
@@ -121,6 +120,7 @@ public class Triangulation
             window.panel.removeDrawable(currentPoint);
         }
 
+        // Dispose of the super triangle and triangles sharing it's verticies
         removeSuper();
     }
 
@@ -147,7 +147,6 @@ public class Triangulation
         removeTriangles(toRemove);
         window.panel.removeDrawable(superTriangle);
         refreshVisualization();
-
     }
 
     private void addTriangles(LinkedList<Point> verts, Point currentPoint)
@@ -196,8 +195,6 @@ public class Triangulation
 
         for(Triangle t : this.triangles)
         {
-            System.out.println(t.toString());
-
             Circle circle = Circle.circumcircle(t);
 
             if(circle == null)
@@ -206,7 +203,7 @@ public class Triangulation
             if(inRange(circle, currentPoint))
                 badOnes.add(t);
 
-            // Draw circle for visualization
+            // Temporarly draw a circle for visualization
             window.panel.AddDrawable(circle);
             refreshVisualization();
             window.panel.removeDrawable(circle);
