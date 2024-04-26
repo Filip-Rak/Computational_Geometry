@@ -59,7 +59,7 @@ public class Point implements Drawable
         return new Point(vx, vy);
     }
 
-    public static ArrayList<Point> loadFromFile(String filename)
+    public static LinkedList<Point> loadFromFile(String filename)
     {
         try
         {
@@ -70,7 +70,7 @@ public class Point implements Drawable
             int size = scanner.nextInt();
 
             // Create an array, load contents
-            ArrayList<Point> arr = new ArrayList<>();
+            LinkedList<Point> arr = new LinkedList<>();
             for(int i = 0; i < size; i++)
             {
                 double x = scanner.nextDouble();
@@ -88,7 +88,7 @@ public class Point implements Drawable
         }
     }
 
-    public static void transformArray(ArrayList<Point> arr, double scale_X, double scale_Y, double offset_X, double offset_Y)
+    public static void transformList(LinkedList<Point> arr, double scale_X, double scale_Y, double offset_X, double offset_Y)
     {
         for(Point p : arr)
         {
@@ -164,7 +164,7 @@ public class Point implements Drawable
 
     public String toString()
     {
-        return "X: " + this.getX() + " " + this.getY();
+        return "X: " + this.getX() + " Y: " + this.getY();
     }
 
     public static LinkedList<Point> getUnique(LinkedList<Point> points)

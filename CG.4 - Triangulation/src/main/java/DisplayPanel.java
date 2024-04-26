@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DisplayPanel extends JPanel
@@ -56,6 +57,24 @@ public class DisplayPanel extends JPanel
     {
         this.drawableList.add(object);
         this.colorList.add(Color.BLACK);
+    }
+
+    public void AddDrawable(LinkedList<? extends Drawable> drawables)
+    {
+        for(Drawable d : drawables)
+        {
+            this.drawableList.add(d);
+            this.colorList.add(Color.BLACK);
+        }
+    }
+
+    public void AddDrawable(LinkedList<? extends Drawable> drawables, Color color)
+    {
+        for(Drawable d : drawables)
+        {
+            this.drawableList.add(d);
+            this.colorList.add(color);
+        }
     }
 
     public void removeDrawable(Drawable object)
@@ -111,6 +130,13 @@ public class DisplayPanel extends JPanel
             // Request the panel to repaint itself
             repaint();
         }
+    }
+
+    public void refreshAndClear()
+    {
+        refreshBufferedImage();
+        this.drawableList.clear();
+        this.colorList.clear();
     }
 
     //getters

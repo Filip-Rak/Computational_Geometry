@@ -159,6 +159,20 @@ public class Triangle implements Drawable
         return verts;
     }
 
+    public boolean contains(Point p)
+    {
+        double areaTotal = determinant(vertices[0], vertices[1], vertices[2]);
+        double alpha = determinant(p, vertices[1], vertices[2]) / areaTotal;
+        double beta = determinant(vertices[0], p, vertices[2]) / areaTotal;
+        double gamma = determinant(vertices[0], vertices[1], p) / areaTotal;
+
+        return alpha >= 0 && beta >= 0 && gamma >= 0 && (alpha + beta + gamma) <= 1;
+    }
+
+    private double determinant(Point p1, Point p2, Point p3) {
+        return p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y);
+    }
+
     public String toString()
     {
         return "X1: " + vertices[0].getX() + " Y1: " + vertices[0].getY() +
