@@ -2,7 +2,7 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Delaunay
+public class DelaunayVis
 {
     // Attibutes
     // Storage
@@ -13,12 +13,17 @@ public class Delaunay
     // Modifiers
     private double expansion;
 
+    // Visualization
+    DisplayFrame window;
+    private int delay;
+
     // Constructors
-    Delaunay(LinkedList<Point> pointsInput, double expansion)
+    DelaunayVis(LinkedList<Point> pointsInput, double expansion, int delay)
     {
         // Initialization
         initModifiers(expansion);
         initStorage(pointsInput);
+        initVisualization(delay);
         initTriangulation();
 
         // Algortihm's loop
@@ -67,6 +72,14 @@ public class Delaunay
         this.expansion = expansion;
     }
 
+    private void initVisualization(int delay)
+    {
+        window = new DisplayFrame(true, 800, 600);
+        this.delay = delay;
+
+        window.panel.AddDrawable(this.superTriangle, Color.BLUE);
+    }
+
     private void initTriangulation()
     {
         // Get superTriangle's verticies and make tringles with the first point
@@ -74,6 +87,11 @@ public class Delaunay
         triangles.add(new Triangle(s_verts.get(0), s_verts.get(1), points.getFirst()));
         triangles.add(new Triangle(s_verts.get(2), s_verts.get(1), points.getFirst()));
         triangles.add(new Triangle(s_verts.get(2), s_verts.get(0), points.getFirst()));
+
+        // Add newly made triangles to visualization
+        window.panel.AddDrawable(triangles.get(0), Color.BLUE);
+        window.panel.AddDrawable(triangles.get(1), Color.BLUE);
+        window.panel.AddDrawable(triangles.get(2), Color.BLUE);
     }
 
     // Triangulation methods
@@ -82,6 +100,7 @@ public class Delaunay
         for(int i = 1; i < points.size(); i++)
         {
             Point currentPoint = points.get(i);
+            window.panel.AddDrawable(currentPoint, Color.YELLOW);
 
             // Find all broken traingles and delete them
             LinkedList<Triangle> brokenTriangles = findBrokenTriangles(currentPoint);
@@ -95,6 +114,10 @@ public class Delaunay
 
             // Create new triangles with current as their point
             addTriangles(verts, currentPoint);
+
+            // Refresh Visualization
+            refreshVisualization();
+            window.panel.removeDrawable(currentPoint);
         }
 
         // Dispose of the super triangle and triangles sharing it's verticies
@@ -122,6 +145,8 @@ public class Delaunay
         }
 
         removeTriangles(toRemove);
+        window.panel.removeDrawable(superTriangle);
+        refreshVisualization();
     }
 
     private void addTriangles(LinkedList<Point> verts, Point currentPoint)
@@ -130,6 +155,8 @@ public class Delaunay
         {
             Triangle newTriangle = new Triangle(verts.get(i), verts.get(i+1), currentPoint);
             this.triangles.add(newTriangle);
+
+            window.panel.AddDrawable(newTriangle, Color.GREEN);
         }
 
 
@@ -137,13 +164,18 @@ public class Delaunay
         {
             Triangle lastTriangle = new Triangle(verts.getLast(), verts.getFirst(), currentPoint);
             this.triangles.add(lastTriangle);
+
+            window.panel.AddDrawable(lastTriangle , Color.GREEN);
         }
     }
 
     private void removeTriangles(LinkedList<Triangle> brokenTriangles)
     {
         for(Triangle broken : brokenTriangles)
+        {
             triangles.remove(broken);
+            window.panel.removeDrawable(broken);
+        }
     }
 
     private LinkedList<Point> uniqueVerts(LinkedList<Triangle> triangles)
@@ -170,6 +202,11 @@ public class Delaunay
 
             if(inRange(circle, currentPoint))
                 badOnes.add(t);
+
+            // Temporarly draw a circle for visualization
+            window.panel.AddDrawable(circle);
+            refreshVisualization();
+            window.panel.removeDrawable(circle);
         }
 
         return badOnes;
@@ -188,6 +225,13 @@ public class Delaunay
             double angle2 = Math.atan2(p2.y - center.y, p2.x - center.x);
             return Double.compare(angle1, angle2);
         });
+    }
+
+    private void refreshVisualization()
+    {
+        window.panel.refreshBufferedImage();
+        try{ Thread.sleep(delay); }
+        catch (Exception ignore){}
     }
 
     // Getters

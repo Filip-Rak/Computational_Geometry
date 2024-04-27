@@ -15,6 +15,7 @@ public class Circle implements Drawable
 
     // Getters
     public Point getCenter() { return center; }
+
     public double getRadius() { return radius; }
 
     public static Circle circumcircle(Point A, Point B, Point C)

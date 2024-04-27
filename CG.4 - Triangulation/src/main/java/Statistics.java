@@ -1,5 +1,4 @@
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Statistics
 {
@@ -13,6 +12,8 @@ public class Statistics
     private double median_quality;
     private double min_quality;
     private double max_quality;
+    private Map<Double, Integer> qualityFrequency;
+    private double modeQuality;
 
     private LinkedList<Double> sizes;
     private double avg_size;
@@ -20,12 +21,15 @@ public class Statistics
     private double min_size;
     private double max_size;
 
+    private final long time;
+
     // Constructor
-    Statistics(LinkedList<Triangle> t_input, String title)
+    Statistics(LinkedList<Triangle> t_input, String title, long time)
     {
         // Initialization
         this.triangles = new LinkedList<>(t_input);
         this.title = title;
+        this.time = time;
 
         // Stat gathering
         calcQuality();
@@ -34,7 +38,6 @@ public class Statistics
         // Print the results to console
         print();
     }
-
 
     // Init methods
     private void calcQuality()
@@ -57,6 +60,39 @@ public class Statistics
 
         avg_quality /= triangles.size();
         median_quality = median(qualities);
+        calculateModeQuality();
+    }
+
+    private void calculateModeQuality()
+    {
+        // Number of intervals
+        final int BINS = 10;
+        qualityFrequency = new HashMap<>();
+        for(double q : qualities)
+        {
+            // Calculate bin index, ensuring it falls within 0 to BINS - 1
+            int binIndex = (int) Math.floor(q * BINS);
+            if (q == 1.0)
+                binIndex = BINS - 1;
+            // Use binIndex as the key for the histogram
+            double binKey = binIndex / (double) BINS;
+            qualityFrequency.put(binKey, qualityFrequency.getOrDefault(binKey, 0) + 1);
+        }
+
+        // Find highest frequency
+        int maxCount = -1;
+        double modeQualityValue = -1.0;
+        for(Map.Entry<Double, Integer> entry : qualityFrequency.entrySet())
+        {
+            if(entry.getValue() > maxCount)
+            {
+                maxCount = entry.getValue();
+                modeQualityValue = entry.getKey();
+            }
+        }
+
+        // Convert the bin key back to the quality score that it represents
+        modeQuality = modeQualityValue + 1.0 / BINS / 2; // Add half the bin width to get the middle of the bin
     }
 
     private void calcSize()
@@ -97,7 +133,7 @@ public class Statistics
         if(values.size() > 1)
         {
             if(values.size() % 2 == 0 )
-                return values.get(values.size() / 2) + values.get((values.size() / 2) - 1) / 2;
+                return (values.get(values.size() / 2) + values.get((values.size() / 2) - 1)) / 2;
             else
                 return values.get((int)(values.size() / 2));
         }
@@ -129,20 +165,59 @@ public class Statistics
         return quality;
     }
 
+    private void printHistogram()
+    {
+        System.out.println(title + " - Quality Histogram:");
+        final int MAX_BAR_LENGTH = 50; // Maximum length of histogram bar for scaling
+
+        // Convert to TreeMap to sort by keys
+        TreeMap<Double, Integer> sortedHistogram = new TreeMap<>(qualityFrequency);
+        int maxFrequency = Collections.max(sortedHistogram.values());
+
+
+        for (Map.Entry<Double, Integer> entry : sortedHistogram.entrySet())
+        {
+            double binStart = entry.getKey();
+
+            // End is exclusive; last bin includes 1.0
+            double binEnd = binStart + 1.0 / 10;
+            if (binEnd > 1.0) binEnd = 1.0;
+
+            int frequency = entry.getValue();
+
+            // Scale the bar length to the max frequency for better visualization
+            int barLength = (int)(((double)frequency / maxFrequency) * MAX_BAR_LENGTH);
+
+            // Create the bar using a string of asterisks
+            String bar = String.join("", Collections.nCopies(barLength, "*"));
+
+            // Correctly formatted string for the bin range
+            String binRange = String.format("[%.2f - %.2f)", binStart, binEnd);
+            if (binEnd == 1.0)
+                binRange = String.format("[%.2f - %.2f]", binStart, binEnd); // Inclusive of 1.0 for the last bin
+
+            System.out.printf("%s : %s (%d)\n", binRange, bar, frequency);
+        }
+    }
+
     private void print()
     {
         System.out.println(
                 "-------------------------"
                 + "\nMethod: " + this.title
                 + "\nElements in total: " + this.triangles.size()
-                + "\nAvergae quality: " + this.avg_quality
+                + "\nAverage quality: " + this.avg_quality
                 + "\nMedian quality: " + this.median_quality
                 + "\nWorst quality: " + this.min_quality
                 + "\nBest quality: " + this.max_quality
+                + "\nMode quality: " + this.modeQuality
                 + "\nAverage area: " + this.avg_size
                 + "\nMedian area: " + this.median_size
                 + "\nSmallest area: " + this.min_size
                 + "\nBiggest area: " + this.max_size
+                + "\nExecution time (ms): " + this.time / 1000000
         );
+
+        printHistogram();
     }
 }

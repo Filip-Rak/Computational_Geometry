@@ -17,5 +17,4 @@ public class DisplayFrame extends JFrame
         this.setVisible(true);
         this.setResizable(false);
     }
-
 }

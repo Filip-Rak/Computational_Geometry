@@ -1,6 +1,8 @@
+import javax.naming.LinkLoopException;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -19,6 +21,11 @@ public class Triangle implements Drawable
         vertices[1] = p2;
         vertices[2] = p3;
 
+        calcLengths();
+    }
+
+    private void calcLengths()
+    {
         //Obliczanie dlugosci bokow
         this.lengths[0] = Point.distance(vertices[0], vertices[1]);
         this.lengths[1] = Point.distance(vertices[1], vertices[2]);
@@ -178,6 +185,23 @@ public class Triangle implements Drawable
         return "X1: " + vertices[0].getX() + " Y1: " + vertices[0].getY() +
                 "X2: " + vertices[0].getX() + " Y2: " + vertices[0].getY() +
                 "X3: "+ vertices[0].getX() + " Y2: " + vertices[0].getY();
+    }
+
+    public static void transformList(LinkedList<Triangle> triangles, double scaleX, double scaleY, double offsetX, double offsetY)
+    {
+        // Get unique points in order to not apply offset to the same vertices multiple times
+        LinkedList<Point> points = Point.extractPoints(triangles);
+        LinkedList<Point> unique = Point.getUnique(points);
+
+        for(Point u : unique)
+        {
+            u.setX(u.getX() * scaleX);
+            u.setY(u.getY() * scaleY);
+
+            u.setX(u.getX() + offsetX);
+            u.setY(u.getY() + offsetY);
+        }
+
     }
 
     public double[] getLengths() { return this.lengths; }
