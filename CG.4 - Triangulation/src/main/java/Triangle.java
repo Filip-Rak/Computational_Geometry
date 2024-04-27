@@ -181,5 +181,12 @@ public class Triangle implements Drawable
     }
 
     public double[] getLengths() { return this.lengths; }
+    public double getLengths(int index)
+    {
+        if(index > 3 || index < 0)
+            return -1;
+
+        return this.lengths[index];
+    }
     public List<Triangle> getNeighbours() { return this.neighbours; }
 }

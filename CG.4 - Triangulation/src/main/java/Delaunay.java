@@ -2,7 +2,7 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Triangulation
+public class Delaunay
 {
     // Attibutes
     // Storage
@@ -18,7 +18,7 @@ public class Triangulation
     private int delay;
 
     // Constructors
-    Triangulation(LinkedList<Point> pointsInput, double expansion, int delay)
+    Delaunay(LinkedList<Point> pointsInput, double expansion, int delay)
     {
         // Initialization
         initModifiers(expansion);
