@@ -68,10 +68,10 @@ Visualization was not by requirement but rather as tool to help with coding. Spe
   <table>
     <tr>
       <td style="padding-right: 20px;">
-        <img src="media/cg3.1.gif" alt="Meshing Alien" height = "317" width="385">
+        <img src="media/cg3.1.gif" alt="Meshing Alien" height = "305" width="385">
       </td>
       <td>
-        <img src="media/cg3.2.gif" alt="Meshing Circle" height= "317" width="385">
+        <img src="media/cg3.2.gif" alt="Meshing Circle" height= "305" width="385">
       </td>
     </tr>
   </table>
@@ -89,10 +89,10 @@ Speed differences are only because of visualizational purpouses.
   <table>
     <tr>
       <td style="padding-right: 20px;">
-        <img src="media/cg4.1.gif" alt="Delaunay Triangulation" height = "300" width="400">
+        <img src="media/cg4.1.gif" alt="Delaunay Triangulation" height = "289" width="385">
       </td>
       <td>
-        <img src="media/cg4.2.gif" alt="Ear Clipping" height = "300" width="400">
+        <img src="media/cg4.2.gif" alt="Ear Clipping" height = "289" width="385">
       </td>
     </tr>
   </table>
