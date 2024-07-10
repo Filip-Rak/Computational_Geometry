@@ -1,17 +1,17 @@
 # Overview
 This repository consists of projects for 'Computational Geometry', which I had during my fourth semester at AGH University of Cracow.
-All of the sfotware has been created with usage of IntelliJ IDEA in Java language.
+All of the software has been created with usage of IntelliJ IDEA in Java language.
 
-A big part of this repository is a display system made using wing Java library. The system was written from ground up by me and has significanlty changed overtime to fulfil the needs of respective projects. 
+A big part of this repository is a display system made using wing Java library. The system was written from ground up by me and has significantly changed overtime to fulfil the needs of respective projects. 
 The system can visualize geometrical shapes, draw them in a specific color and later even visualize their movement. 
 
 Comprehensive descriptions of specific projects are below.
 
 # CG.1 - 2D Space
-The project is seperated into three windows, which consists of different excersises. Windows are changed by accessing the main methods and uncommenting them
+The project is separated into three windows, which consists of different exercises. Windows are changed by accessing the main method and uncommenting them
 ## **First window**:
 Showcases basic geometry shapes like: Points, lines, polygons and triangles.
-The method demonstrates a plethora of various of geometric operations, which among others include:
+The method demonstrates a plethora of various geometric operations, which among others include:
 - Line Equations
 - Point Alignment
 - Point Relation to Line
@@ -36,7 +36,7 @@ This one I believe to be the most interesting part of this particul project and 
 The task was to simulate a spaceship (given as a set of points in a txt file) flying in a given direction at specific speed (in another txt file) as well as simulate missiles.
 The main objective was to calculate the times at which the collisions happened.
 In my case I decided to do a bit more than was necessary and ended up making something akin to a very simple game (albeit with limited controls). 
-For that purpouse many changes had to happen to visualization system, allowing it to display many objects and visualize their movements. 
+For that purpose many changes had to happen to visualization system, allowing it to display many objects and visualize their movements. 
 
   ### Controls
   - **Space**: Pause the simulation.
@@ -59,10 +59,10 @@ As it usually is with homework, we weren't really given any useful information a
 
 Unfortunately, quick information about implementation of this algorithm is simply not available on the internet. Granted sufficient time of course it can be figured out from research papers and so on. 
 However, in the circumstances of the time, at best I had 2 days to make it work - in the middle of the week during classes. 
-Despite that, I have managed to spend about 30 hours within these two days on conding that thing (I used WakaTime, so the number should be rather accurate)
-The procces of meshing was visualized once again using the system which originated from the very first project. 
+Despite that, I have managed to spend about 30 hours within these two days on condig that thing (I used WakaTime, so the number should be rather accurate)
+The process of meshing was visualized once again using the system which originated from the very first project. 
 
-Visualization was not by requirement but rather as tool to help with coding. Speed differences are only for it's purpouse.
+Visualization was not by requirement but rather as tool to help with coding. Speed differences are only for its purpose.
 
 <p align="center">
   <table>
@@ -82,7 +82,7 @@ Visualization was not by requirement but rather as tool to help with coding. Spe
 # CG.4 - Triangulation
 Once again a project about meshing, triangulation however was significantly easier than the previous algorithm. 
 Two meshing algorithms included are Delaunay Triangulation (left) and Ear Clipping algorithm (right). 
-Speed differences are only because of visualizational purpouses.
+Speed differences are only because of visualization purposes.
 
 
 <p align="center">
