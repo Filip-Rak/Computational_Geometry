@@ -48,8 +48,8 @@ public class Visualization
         level += 1;
         level  = Math.pow(level, 1.25);
 
-        //try{ Thread.sleep(100); }
-        //catch (Exception ignore) {}
+        try{ Thread.sleep(150); }
+        catch (Exception ignore) {}
 
         double new_x_offset = x_offset / (level);
         //double new_x_offset = x_offset;
