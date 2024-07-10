@@ -54,7 +54,7 @@ This project was about implementing one and two-dimensional Range Trees. To visu
 # CG.3 - Mesh
 This was by far the most Intense project I have ever worked on. 
 
-The project was bout implementing the Bowyer-Watson meshing algorithm. 
+The project was about implementing the Bowyer-Watson meshing algorithm. 
 As it usually is with homework, we weren't really given any useful information about how this algorithm should have worked, let alone any guidance or tips, that could have helped us.
 
 Unfortunately, quick information about implementation of this algorithm is simply not available on the internet. Granted sufficient time of course it can be figured out from research papers and so on. 
@@ -68,10 +68,10 @@ Visualization was not by requirement but rather as tool to help with coding. Spe
   <table>
     <tr>
       <td style="padding-right: 20px;">
-        <img src="media/cg3.1.gif" alt="Meshing Alien" height = "317" width="400">
+        <img src="media/cg3.1.gif" alt="Meshing Alien" height = "317" width="390">
       </td>
       <td>
-        <img src="media/cg3.2.gif" alt="Meshing Circle" height= "317" width="400">
+        <img src="media/cg3.2.gif" alt="Meshing Circle" height= "317" width="390">
       </td>
     </tr>
   </table>
