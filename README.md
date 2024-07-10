@@ -68,10 +68,10 @@ Visualization was not by requirement but rather as tool to help with coding. Spe
   <table>
     <tr>
       <td style="padding-right: 20px;">
-        <img src="media/cg3.1.gif" alt="Meshing Alien" height = "317" width="390">
+        <img src="media/cg3.1.gif" alt="Meshing Alien" height = "317" width="385">
       </td>
       <td>
-        <img src="media/cg3.2.gif" alt="Meshing Circle" height= "317" width="390">
+        <img src="media/cg3.2.gif" alt="Meshing Circle" height= "317" width="385">
       </td>
     </tr>
   </table>
